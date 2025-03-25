@@ -11,9 +11,8 @@
   programs.home-manager.enable = true;
   imports = [
     ../../user/shell/sh.nix
-    ../../user/lang/haskell.nix
+    ../../user/lang
     ../../user/style/stylix.nix
-    ../../user/lang/python/python.nix
     ../../user/wm/${userSettings.wm}
     ../../user/apps
   ];

@@ -1,50 +1,50 @@
-{ pkgs, ... }:
+{pkgs, ...}:
 {
+  home.packages = [ pkgs.thunderbird ];
   programs.thunderbird = {
-    # Enable the Thunderbird mail client
     enable = true;
+    package = pkgs.thunderbird;
+    settings = {
+      # Privacy settings
+      "privacy.donottrackheader.enabled" = true;
+      "network.cookie.cookieBehavior" = 1;  # Reject all cookies
+      "privacy.resistFingerprinting" = true;
 
-    # Optionally specify which Thunderbird package you want.
-    # By default, this is `pkgs.thunderbird`. For instance, you could use the -bin variant:
-    # package = pkgs.thunderbird-bin;
+      # Calendar configurations
+      "calendar.timezone.local" = "Europe/London";
+      "calendar.view.minimonth.showWeekNumbers" = true;
+      "calendar.integration.notifications" = true;
+      "calendar.notifications.alarm" = 2;   # Show alarms in notification center
 
-    # (Optional) Specify Thunderbird’s Group Policies as JSON.
-    # For example, to declare a simple policy:
-    policies = {
-      # Example: Force a particular homepage on new tabs.
-      "Homepage" = {
-        "StartPage" = "https://www.nixos.org"
-        # "Override" = true
-      };
+      # Email client settings
+      "mail.shell.checkDefaultClient" = false;
+      "mail.startup.enabledMailCheckOnce" = true;  # check mail on startup
+      "mail.biff.animate_icon" = false;             # Disable bouncing tray icon
+      "mail.paneconfig.dynamic" = true;             # Dynamic toolbar layout
 
-      # Example: Use ExtensionSettings to install or manage extensions.
-      # "ExtensionSettings" = {
-      #   "*@mozilla.org" = {
-      #     "allowed_types" = [ "extension" "theme" "dictionary" ];
-      #     "updates_enabled" = true;
-      #     "install_sources" = [ "https://addons.mozilla.org/" ];
-      #   };
-      # };
-    };
+      # Appearance and UI
+      "browser.display.use_system_colors" = true;   # Follow system theme
+      "mail.uidensity" = 1;                         # Compact view (0=normal, 1=compact)
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true; # Enable user CSS
 
-    # (Optional) Set Thunderbird preferences from `about:config`.
-    preferences = {
-      # Example: Disable auto-updates
+      # Performance and updates
       "app.update.auto" = false;
-
-      # Example: Configure how cookies are handled
-      # 0 = Accept all
-      # 1 = Only from originating site
-      "network.cookie.cookieBehavior" = 1;
-
-      # ... add more preferences as needed
+      "mail.spellcheck.inline" = true;
+      "general.smoothScroll" = true;
+      "layers.acceleration.force-enabled" = true;   # Enable hardware acceleration
     };
 
-    # (Optional) Control how the above preferences appear:
-    #  - "locked":   Preferences appear as default and cannot be changed
-    #  - "default":  Preferences appear as default (user can override)
-    #  - "user":     Preferences appear as changed by the user
-    #  - "clear":    Resets to factory defaults on each startup
-    preferencesStatus = "default";
+    profiles = {
+      "hochschule" = {
+        isDefault = true;
+        settings = {
+          "mail.identity.id1.fullName" = "Abdullah Ahmed";
+          "mail.identity.id1.useremail" = "s-aahmed@haw-landshut.com";
+          "mail.server.server1.hostname" = "xmail.mwn.de";
+          "mail.server.server1.type" = "imap";
+          "mail.server.server1.userName" = "ads\\la-s-aahmed";
+        };
+      };
+    };
   };
 }
