@@ -4,5 +4,5 @@
     ./python
     ./haskell.nix
     ./nix.nix
-  ]
+  ];
 }
