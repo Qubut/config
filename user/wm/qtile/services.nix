@@ -1,4 +1,5 @@
 { config, pkgs, ... }: {
+  services.pasystray.enable = false;
   services.dunst = {
     enable = true;
     settings = {
