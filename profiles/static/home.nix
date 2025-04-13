@@ -9,7 +9,7 @@
   home.homeDirectory = "/home/" + userSettings.username;
   programs.home-manager.enable = true;
   imports = [
-    ../../user/shell/sh.nix
+    ../../user/shell
     ../../user/lang
     ../../user/style/stylix.nix
     ../../user/wm/${userSettings.wm}
