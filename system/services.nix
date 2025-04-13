@@ -1,6 +1,7 @@
 { lib, pkgs, ... }:
 
 {
+  services.dbus.enable = true;
   services.tumbler.enable = true; # Thumbnail support for images
   services.openssh.enable = true;
   services.gvfs.enable = true; # Mount, trash, and other functionalities
