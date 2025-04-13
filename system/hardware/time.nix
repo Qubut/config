@@ -1,4 +1,4 @@
-{ ... }:
+{ systemSettings, ... }:
 
 {
   services.timesyncd.enable = true;
