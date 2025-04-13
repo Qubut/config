@@ -73,6 +73,9 @@ in
       export GVIMINIT='let $MYGVIMRC = !has("nvim") ? "$XDG_CONFIG_HOME/vim/gvimrc" : "$XDG_CONFIG_HOME/nvim/init.gvim" | so $MYGVIMRC'
       export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
       export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
+      export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+      export AWS_SHARED_CREDENTIALS_FILE="$XDG_CONFIG_HOME"/aws/credentials
+      export AWS_CONFIG_FILE="$XDG_CONFIG_HOME"/aws/config
       alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
       # export DRI_PRIME=1
       #export GHCUP_INSTALL_BASE_PREFIX=$XDG_CONFIG_HOME
@@ -95,6 +98,7 @@ in
       export LEIN_HOME="$XDG_DATA_HOME"/lein
       export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
       export PYTHONUSERBASE="$XDG_DATA_HOME/python"
+      export PYTHON_HISTORY=$XDG_STATE_HOME/
       export PATH="$PATH:~/.local/share/pyenv/versions/"
       export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
       export DOT_SAGE="$XDG_CONFIG_HOME"/sage
