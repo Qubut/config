@@ -57,7 +57,7 @@
           homeConfigurations = lib.listToAttrs (
             map
               (machine: {
-                name = "${machine.hostname}-${system}";
+                name = "${machine.hostname}-${machine.profile}-${system}";
                 value = home-manager.lib.homeManagerConfiguration {
                   inherit pkgs;
                   modules = [
@@ -81,7 +81,7 @@
           nixosConfigurations = lib.listToAttrs (
             map
               (machine: {
-                name = "${machine.hostname}-${system}";
+                name = "${machine.hostname}-${machine.profile}-${system}";
                 value = lib.nixosSystem {
                   system = system;
                   modules = [
