@@ -1,4 +1,4 @@
-{lib, ...}:
+{lib, pkgs, userSettings, ...}:
 {
     imports = [
     (import ./docker.nix {
