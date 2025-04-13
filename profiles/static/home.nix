@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  userSettings,
-  ...
+{ config
+, pkgs
+, userSettings
+, ...
 }:
 {
   home.stateVersion = "24.05";
@@ -66,7 +65,5 @@
     telegram-desktop
     okular
   ];
-  services.pasystray.enable = false;
-  nixpkgs.config.allowUnfree = true;
   fonts.fontconfig.enable = true;
 }
