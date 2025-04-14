@@ -7,6 +7,7 @@
     bootMountPath = "/boot";
     grubDevice = ""; # Only used for legacy (BIOS) boot mode
     gpuType = "nvidia"; # Supports slight mods for AMD currently
+    cpuType = "intel";
   };
   userSettings = rec {
     username = "falcon";

@@ -61,6 +61,7 @@
     wayland-scanner
     kdePackages.qtbase
     timeshift
+    (if systemSettings.cpuType == "intel" then microcodeIntel else microcodeAmd)
   ];
 
   environment.sessionVariables = {
