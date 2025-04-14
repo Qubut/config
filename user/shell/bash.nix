@@ -9,7 +9,7 @@ let
 in
 {
   home.packages = [
-    pkgs.ble-sh # For syntax highlighting, autosuggestions, and history search
+    pkgs.blesh # For syntax highlighting, autosuggestions, and history search
     pkgs.starship # For a customizable prompt
   ];
 
@@ -31,16 +31,15 @@ in
       ${functions}
 
       # Source ble.sh for syntax highlighting, autosuggestions, and history search
-      [[ -f ${pkgs.ble-sh}/share/ble.sh ]] && source ${pkgs.ble-sh}/share/ble.sh
+      [[ -f ${pkgs.blesh}/share/ble.sh ]] && source ${pkgs.blesh}/share/ble.sh
 
       # Auto-start tmux, matching Zsh's behavior
       if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
         exec tmux new-session -A -s autostart
       fi
+      eval "$(${pkgs.starship} init bash)"
     '';
   };
-
-  # Enable starship prompt
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
