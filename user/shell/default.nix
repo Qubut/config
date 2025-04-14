@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, userSettings, ... }:
 let
   envExtra = ''
     export ZSHDO
@@ -81,7 +81,7 @@ in
     ./bash.nix
   ];
   programs.zsh.envExtra = envExtra;
-  programs.bash.envExtra = envExtra;
+  programs.bash.bashrcExtra = envExtra;
   programs.zoxide.enable = true;
   programs.direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
