@@ -1,6 +1,7 @@
 { pkgs, ... }:
 
-{ imports = [ ./python-packages.nix ];
+{
+  imports = [ ./python-packages.nix ];
   home.packages = with pkgs; [
     # Python setup
     python3Full
