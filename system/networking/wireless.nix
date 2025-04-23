@@ -26,7 +26,7 @@ in
 
   # Store sensitive data (e.g., passwords) in an environment file
   # File should be at /etc/wpa_supplicant.env and readable only by root
-  networking.wireless.environmentFile = "/etc/wpa_supplicant.env";
+  # networking.wireless.environmentFile = "/etc/wpa_supplicant.env";
 
   # Define wireless networks with secure configurations
   # networking.wireless.networks = {
