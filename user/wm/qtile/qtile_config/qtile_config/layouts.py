@@ -3,8 +3,8 @@ from libqtile.config import Drag, Group, Key, Match, Screen, ScratchPad
 
 layouts = [
     layout.MonadTall(ratio=0.56, single_border_width=0, single_margin=9, margin=9),
-    layout.TreeTab(border_width=0),
     layout.Max(),
+    layout.TreeTab(border_width=0),
     layout.Zoomy(),
     layout.Stack(num_stacks=2),
 ]
@@ -27,6 +27,8 @@ floating_layout = layout.Floating(
         Match(wm_class="wrapper-2.0"),
         Match(wm_class="gnome-calendar"),
         Match(title="steamwebhelper"),
+        Match(wm_class=".blueman-manager-wrapped"),
+        Match(wm_class="pavucontrol"),
         Match(wm_class="gnome-system-monitor"),
         Match(title="Application Launcher"),
         Match(wm_class="Geary"),
