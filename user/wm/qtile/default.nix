@@ -30,8 +30,8 @@ in
   qt = {
     enable = true;
     style.package = pkgs.kdePackages.breeze;
-    style.name = "Adwaita-Dark";
-    platformTheme.name = "kde";
+    style.name = "Breeze";
+    platformTheme.name = "gtk3";
   };
   xsession = {
     enable = true;
