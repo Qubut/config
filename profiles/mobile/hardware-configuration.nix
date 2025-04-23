@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  modulesPath,
-  systemSettings,
-  ...
+{ config
+, lib
+, pkgs
+, modulesPath
+, systemSettings
+, ...
 }:
 
 {
@@ -20,14 +19,14 @@
   ];
   boot.initrd.kernelModules = [
     "dm-snapshot"
-    "nvidia"
   ];
   boot.kernelModules = [
     "kvm-intel"
-    "nvidia"
     "cpufreq_powersave"
     "i2c-dev"
     "i2c-piix4"
+    "acpi_video"
+    (if systemSettings.gpuType == "amd" then "amdgpu" else if systemSettings.gpuType == "nvidia" then "nvidia" else "i915")
   ];
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [
