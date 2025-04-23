@@ -11,11 +11,20 @@ in
   home.packages =
     with pkgs;
     [
+      brightnessctl
+      kbdd
+      dbus
+      python3Packages.dbus-fast
+      python3Packages.psutil
+      python3Packages.pyqt6
       xclip
+      xsel
       redshift
       redshift-plasma-applet
-      pkgs.gnome-calendar
-      pkgs.gnome-system-monitor
+      baobab
+      gnome-calendar
+      gnome-system-monitor
+      gnome-power-manager
       alacritty
       kitty
       feh
@@ -33,7 +42,6 @@ in
       pinentry-gnome3
       wev
       hyprshot
-      python311Packages.pyqt6
       kdePackages.qtwayland
       qt6.qtwayland
       xdg-utils
