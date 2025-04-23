@@ -1,10 +1,14 @@
 {pkgs, ... }:
-
+let
+  picom-24_05 = (import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/refs/tags/24.05.tar.gz";
+    sha256 = "1lr1h35prqkd1mkmzriwlpvxcb34kmhc9dnr48gkm8hh089hifmx";
+  }) { system = pkgs.system; } ).picom;
+in
 {
-
   services.picom = {
     enable = true;
-    package = pkgs.picom-pijulius;
+    package = picom-24_05;
     vSync = true;
     backend = "glx";
     wintypes = {
