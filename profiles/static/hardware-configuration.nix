@@ -31,7 +31,14 @@
     "i2c-dev"
     "i2c-piix4"
     "acpi_video"
-    (if systemSettings.gpuType == "amd" then "amdgpu" else if systemSettings.gpuType == "nvidia" then "nvidia" else "i915")
+    (
+      if systemSettings.gpuType == "amd" then
+        "amdgpu"
+      else if systemSettings.gpuType == "nvidia" then
+        "nvidia"
+      else
+        "i915"
+    )
   ];
   boot.kernelParams = [
     "nvidia-drm.fbdev=1"
