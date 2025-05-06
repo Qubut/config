@@ -19,6 +19,7 @@
     ../../system/shell
     ../../system/style/stylix.nix
     ../../system/wm
+    ./user.nix
   ];
 
   programs.firefox.enable = true;
