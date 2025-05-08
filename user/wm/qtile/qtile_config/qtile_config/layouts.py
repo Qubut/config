@@ -30,6 +30,7 @@ floating_layout = layout.Floating(
         Match(wm_class=".blueman-manager-wrapped"),
         Match(wm_class="pavucontrol"),
         Match(wm_class="gnome-system-monitor"),
+        Match(wm_class="gnome-power-statistics"),
         Match(title="Application Launcher"),
         Match(wm_class="Geary"),
         Match(wm_class="Pavucontrol"),
