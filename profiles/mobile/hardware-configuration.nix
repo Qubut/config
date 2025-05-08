@@ -45,12 +45,12 @@
     "btrfs"
   ];
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/a11450a2-7e66-4b4b-a6bb-677d278c8e83";
+    device = "/dev/dm-3";
     fsType = "ext4";
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/3803-4EBB";
+    device = "/dev/nvme0n1p9";
     fsType = "vfat";
     options = [
       "fmask=0022"
@@ -59,7 +59,7 @@
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-uuid/e06879a6-74f9-4630-a0ff-d817c39d5af6";
+    device = "/dev/dm-0";
     fsType = "ext4";
   };
 
