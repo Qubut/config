@@ -22,9 +22,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      type = "git";
-      url = "https://code.hyprland.org/hyprwm/Hyprland.git";
-      submodules = true;
+      url = "github:hyprwm/Hyprland/v0.44.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland-plugins = {
@@ -44,10 +42,18 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, flake-utils, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      flake-utils,
+      ...
+    }:
     let
       lib = nixpkgs.lib;
-      allSystemsOutputs = flake-utils.lib.eachDefaultSystem (system:
+      allSystemsOutputs = flake-utils.lib.eachDefaultSystem (
+        system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
           constants = import ./constants.nix { inherit pkgs; };
@@ -55,52 +61,48 @@
           pkgs-haskell-ormolu = inputs.ormolu.packages.${system}.default;
 
           homeConfigurations = lib.listToAttrs (
-            map
-              (machine: {
-                name = "${machine.hostname}-${machine.profile}-${system}";
-                value = home-manager.lib.homeManagerConfiguration {
-                  inherit pkgs;
-                  modules = [
-                    (./. + "/profiles" + ("/" + machine.profile) + "/home.nix")
-                  ];
-                  extraSpecialArgs = {
-                    systemSettings = constants.baseSystemSettings // {
-                      hostName = machine.hostname;
-                      profile = machine.profile;
-                      system = system;
-                    };
-                    userSettings = constants.userSettings;
-                    inherit inputs;
-                    inherit pkgs-nwg-dock-hyprland;
-                    inherit pkgs-haskell-ormolu;
+            map (machine: {
+              name = "${machine.hostname}-${machine.profile}-${system}";
+              value = home-manager.lib.homeManagerConfiguration {
+                inherit pkgs;
+                modules = [
+                  (./. + "/profiles" + ("/" + machine.profile) + "/home.nix")
+                ];
+                extraSpecialArgs = {
+                  systemSettings = constants.baseSystemSettings // {
+                    hostName = machine.hostname;
+                    profile = machine.profile;
+                    system = system;
                   };
+                  userSettings = constants.userSettings;
+                  inherit inputs;
+                  inherit pkgs-nwg-dock-hyprland;
+                  inherit pkgs-haskell-ormolu;
                 };
-              })
-              constants.machines
+              };
+            }) constants.machines
           );
           nixosConfigurations = lib.listToAttrs (
-            map
-              (machine: {
-                name = "${machine.hostname}-${machine.profile}-${system}";
-                value = lib.nixosSystem {
-                  system = system;
-                  modules = [
-                    (./. + "/profiles" + ("/" + machine.profile) + "/configuration.nix")
-                    inputs.lix-module.nixosModules.default
-                  ];
-                  specialArgs = {
-                    systemSettings = constants.baseSystemSettings // {
-                      hostName = machine.hostname;
-                      profile = machine.profile;
-                      system = system;
-                    };
-                    userSettings = constants.userSettings;
-                    inherit inputs;
-                    inherit constants;
+            map (machine: {
+              name = "${machine.hostname}-${machine.profile}-${system}";
+              value = lib.nixosSystem {
+                system = system;
+                modules = [
+                  (./. + "/profiles" + ("/" + machine.profile) + "/configuration.nix")
+                  inputs.lix-module.nixosModules.default
+                ];
+                specialArgs = {
+                  systemSettings = constants.baseSystemSettings // {
+                    hostName = machine.hostname;
+                    profile = machine.profile;
+                    system = system;
                   };
+                  userSettings = constants.userSettings;
+                  inherit inputs;
+                  inherit constants;
                 };
-              })
-              constants.machines
+              };
+            }) constants.machines
           );
         in
         {
@@ -109,9 +111,11 @@
       );
     in
     {
-      homeConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { }
-        (builtins.attrValues allSystemsOutputs.homeConfigurations);
-      nixosConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { }
-        (builtins.attrValues allSystemsOutputs.nixosConfigurations);
+      homeConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { } (
+        builtins.attrValues allSystemsOutputs.homeConfigurations
+      );
+      nixosConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { } (
+        builtins.attrValues allSystemsOutputs.nixosConfigurations
+      );
     };
 }

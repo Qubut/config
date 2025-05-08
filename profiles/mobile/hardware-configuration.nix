@@ -1,14 +1,16 @@
-{ config
-, lib
-, pkgs
-, modulesPath
-, systemSettings
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  systemSettings,
+  ...
 }:
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "thunderbolt"
@@ -26,7 +28,14 @@
     "i2c-dev"
     "i2c-piix4"
     "acpi_video"
-    (if systemSettings.gpuType == "amd" then "amdgpu" else if systemSettings.gpuType == "nvidia" then "nvidia" else "i915")
+    (
+      if systemSettings.gpuType == "amd" then
+        "amdgpu"
+      else if systemSettings.gpuType == "nvidia" then
+        "nvidia"
+      else
+        "i915"
+    )
   ];
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [
