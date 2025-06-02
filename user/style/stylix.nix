@@ -8,7 +8,7 @@ let
 in
 {
 
-  imports = [ inputs.stylix.homeManagerModules.stylix ];
+  imports = [ inputs.stylix.homeModules.stylix ];
 
   home.file.".currenttheme".text = userSettings.theme;
   stylix.autoEnable = false;
@@ -79,6 +79,8 @@ in
   stylix.targets.gtk.enable = true;
   stylix.targets.rofi.enable = if (userSettings.wmType == "x11") then true else false;
   stylix.targets.feh.enable = if (userSettings.wmType == "x11") then true else false;
+  stylix.targets.btop.enable = false;
+  stylix.targets.dunst.enable = true;
   programs.feh.enable = true;
   home.file.".fehbg-stylix".text = ''
     #!/bin/sh

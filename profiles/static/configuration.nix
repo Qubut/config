@@ -41,6 +41,7 @@
     kdePackages.qtbase
     timeshift
     (if systemSettings.cpuType == "intel" then microcodeIntel else microcodeAmd)
+    vdhcoapp
   ];
 
   environment.sessionVariables = {

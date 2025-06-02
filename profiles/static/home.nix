@@ -8,6 +8,7 @@
   home.username = userSettings.username;
   home.homeDirectory = "/home/" + userSettings.username;
   programs.home-manager.enable = true;
+  nixpkgs.config.allowUnfree = true;
   imports = [
     ../../user/shell
     ../../user/lang
@@ -20,14 +21,7 @@
     TERM = userSettings.term;
     BROWSER = userSettings.browser;
   };
-
   home.packages = with pkgs; [
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "FiraCode"
-        "DroidSansMono"
-      ];
-    })
     xwayland
     tor-browser-bundle-bin
     emacs
@@ -63,7 +57,6 @@
     openfortivpn
     frostwire-bin
     telegram-desktop
-    okular
   ];
   fonts.fontconfig.enable = true;
 }

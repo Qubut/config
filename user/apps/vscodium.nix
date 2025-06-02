@@ -4,7 +4,7 @@
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       dracula-theme.theme-dracula
       vscodevim.vim
       vscode-icons-team.vscode-icons
@@ -34,7 +34,9 @@
         executablePath = "${pkgs.haskellPackages.implicit-hie}/bin/gen-hie";
       };
     };
-    userSettings = {
+    profiles.default.userSettings = {
+      "typst-lsp.experimentalFormatterMode" = "on";
+      "typst-lsp.serverPath" = "${pkgs.tinymist}/bin/tinymist";
       "workbench.iconTheme" = "vscode-icons";
       "python.linting.pylintArgs" = [ "--extension-pkg-whitelist=cv2" "--generate-members" ];
       "svelte-enable-ts-plugin" = true;

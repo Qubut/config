@@ -44,7 +44,7 @@ in
       ignoreSpace = true;
     };
     dotDir = ".config/zsh";
-    initExtra = ''
+    initContent = ''
       ${aliases}
       ${functions}
       ${p10k}
