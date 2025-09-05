@@ -9,5 +9,6 @@
     ./ranger/ranger.nix
     ./thunderbird.nix
     ./gnome-keyring.nix
+    ./podman.nix
   ];
 }
