@@ -10,5 +10,6 @@
     ./thunderbird.nix
     ./gnome-keyring.nix
     ./podman.nix
+    ./firefox.nix
   ];
 }
