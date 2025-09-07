@@ -2,7 +2,8 @@
   description = "User flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default-linux";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
@@ -22,19 +23,27 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      url = "github:hyprwm/Hyprland/v0.44.1";
+      url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hy3 = {
+      url = "github:outfoxxed/hy3";
+      inputs.hyprland.follows = "hyprland";
+    };
+
     hyprland-plugins = {
       type = "git";
       url = "https://code.hyprland.org/hyprwm/hyprland-plugins.git";
       inputs.hyprland.follows = "hyprland";
     };
+
     hyprlock = {
       type = "git";
       url = "https://code.hyprland.org/hyprwm/hyprlock.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nwg-dock-hyprland-pin-nixpkgs.url = "nixpkgs/2098d845d76f8a21ae4fe12ed7c7df49098d3f15";
     xmonad-contexts = {
       url = "github:Procrat/xmonad-contexts";
@@ -46,6 +55,7 @@
     inputs@{
       self,
       nixpkgs,
+      nixpkgs-unstable,
       home-manager,
       flake-utils,
       ...
@@ -56,6 +66,7 @@
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
+          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
           constants = import ./constants.nix { inherit pkgs; };
           pkgs-nwg-dock-hyprland = import inputs.nwg-dock-hyprland-pin-nixpkgs { system = system; };
           pkgs-haskell-ormolu = inputs.ormolu.packages.${system}.default;
@@ -78,6 +89,7 @@
                   inherit inputs;
                   inherit pkgs-nwg-dock-hyprland;
                   inherit pkgs-haskell-ormolu;
+                  inherit pkgs-unstable;
                 };
               };
             }) constants.machines
@@ -100,6 +112,7 @@
                   userSettings = constants.userSettings;
                   inherit inputs;
                   inherit constants;
+                  inherit pkgs-unstable;
                 };
               };
             }) constants.machines
@@ -119,3 +132,4 @@
       );
     };
 }
+# cgEJXpVKdcoisE7M
