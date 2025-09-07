@@ -10,8 +10,6 @@
     enable = true;
     qemu.runAsRoot = false;
   };
-  virtualisation.waydroid.enable = true;
-  # virtualisation.vmware.host.enable = true;
   users.extraGroups.vboxusers.members = [ userSettings.username ];
   virtualisation.virtualbox = {
     host.enable = true;
