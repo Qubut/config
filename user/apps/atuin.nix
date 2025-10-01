@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
-
+let
+  baseColors = config.lib.stylix.colors;
+  toHex = color: "0x${color}";
+in
 {
   programs.atuin = {
     enable = true;
