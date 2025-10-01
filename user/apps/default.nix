@@ -1,4 +1,4 @@
-{...}:
+{ ... }:
 
 {
   imports = [
@@ -11,5 +11,9 @@
     ./gnome-keyring.nix
     ./podman.nix
     ./firefox.nix
+    ./networkmanager-dmenu.nix
+    ./atuin.nix
+    ./starship.nix
   ];
+
 }
