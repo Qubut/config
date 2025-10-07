@@ -8,5 +8,6 @@
     ./firewall.nix
     ./gpg.nix
     ./openvpn.nix
+    ./apparmor.nix
   ];
 }
