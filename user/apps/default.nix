@@ -13,7 +13,7 @@
     ./firefox.nix
     ./networkmanager-dmenu.nix
     ./atuin.nix
-    ./starship.nix
+    ./anki.nix
   ];
 
 }
