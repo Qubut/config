@@ -1,5 +1,6 @@
 { config
 , pkgs
+, pkgs-devenv
 , userSettings
 , ...
 }:
@@ -15,6 +16,7 @@
     ../../user/style/stylix.nix
     ../../user/wm/${userSettings.wm}
     ../../user/apps
+    ../../user/security
   ];
   home.sessionVariables = {
     EDITOR = userSettings.editor;
@@ -23,7 +25,7 @@
   };
   home.packages = with pkgs; [
     xwayland
-    tor-browser-bundle-bin
+    tor-browser
     emacs
     zsh-powerlevel10k
     syncthing
@@ -32,9 +34,6 @@
       withOpenASAR = true;
       # withVencord = true;
     })
-    wineWowPackages.stable
-    winetricks
-    protontricks
     bottles
     (lollypop.override { youtubeSupport = false; })
     mate.atril
@@ -48,15 +47,35 @@
     remmina
     obsidian
     gparted
-    deno
     sshpass
     mangohud # for gaming performance metrics
     vlc
     xorg.xhost
-    whatsapp-for-linux
     openfortivpn
     frostwire-bin
     telegram-desktop
-  ];
-  fonts.fontconfig.enable = true;
+    xournalpp
+    anki-bin
+    mpv
+    zoom-us
+    distrobox
+    localsend
+    gnome-pomodoro
+    antigravity
+  ] ++ [ pkgs-devenv ];
+  xdg.enable = true;
+  xdg.cacheHome = "${config.home.homeDirectory}/.cache";
+  xdg.configHome = "${config.home.homeDirectory}/.config";
+  xdg.dataHome = "${config.home.homeDirectory}/.local/share";
+  xdg.stateHome = "${config.home.homeDirectory}/.local/state";
+  xdg.userDirs.enable = true;
+  xdg.userDirs.createDirectories = true;
+  xdg.userDirs.desktop = "${config.home.homeDirectory}/Desktop";
+  xdg.userDirs.documents = "${config.home.homeDirectory}/Documents";
+  xdg.userDirs.download = "${config.home.homeDirectory}/Downloads";
+  xdg.userDirs.music = "${config.home.homeDirectory}/Music";
+  xdg.userDirs.pictures = "${config.home.homeDirectory}/Pictures";
+  xdg.userDirs.publicShare = "${config.home.homeDirectory}/Public";
+  xdg.userDirs.templates = "${config.home.homeDirectory}/Templates";
+  xdg.userDirs.videos = "${config.home.homeDirectory}/Videos";
 }
