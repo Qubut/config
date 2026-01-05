@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./xdg.nix
     ./tmux.nix
     ./helix.nix
     ./git.nix
