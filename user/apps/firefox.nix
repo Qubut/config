@@ -1,7 +1,7 @@
-{pkgs, nixpkgs-unstable, ...}:
+{pkgs, pkgs-unstable, ...}:
 {
   programs.firefox = {
     enable = true;
-    pkgs = nixpkgs-unstable.firefox;
+    package = pkgs-unstable.firefox;
   };
 }
