@@ -164,6 +164,7 @@ scratchpads_keys = [
 
 launch_programs = [
     Key([mod], "t", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "m", lazy.spawn("thunderbird --name thunderbird"), desc="Launch Mail (Thunderbird)"),
     Key(
         [mod, shift],
         "t",
@@ -183,6 +184,10 @@ launch_programs = [
         "escape",
         lazy.spawn("xfce4-session-logout"),
         desc="Launch logout options",
+    ),
+    Key([mod], "s",
+        lazy.spawn("maim -s | xclip -selection clipboard -t image/png"),
+        desc="Select an area on screen, then copy the selection to clipboard"
     ),
 ]
 
@@ -207,7 +212,7 @@ layouts_control = [
         lazy.window.toggle_floating(),
         desc="Toggle floating on the focused window",
     ),
-    Key([mod], "m", lazy.layout.maximize(), desc="use max layout"),
+    # Key([mod], "m", lazy.layout.maximize(), desc="use max layout"),
     Key(
         [mod],
         "equal",
