@@ -13,7 +13,7 @@
         ];
       }
     )
-    mangohud
+    mangohud # for gaming performance metrics
     gamescope
     protonup-qt
     wineWowPackages.stable
@@ -36,7 +36,20 @@
     # native wayland support (unstable)
     wineWowPackages.waylandFull
   ];
-
+  # programs.lutris = {
+  #   enable = true;
+  #   package = pkgs.lutris;
+  #   extraPackages = with pkgs; [
+  #     mangohud
+  #     winetricks
+  #     gamescope
+  #     gamemode
+  #     umu-launcher
+  #     protontricks
+  #     vulkan-tools
+  #   ];
+  #   winePackages = [ pkgs.wineWowPackages.full ];
+  # };
   programs.gamescope = {
     enable = true;
   };

@@ -48,8 +48,7 @@
     obsidian
     gparted
     sshpass
-    mangohud # for gaming performance metrics
-    vlc
+     vlc
     xorg.xhost
     openfortivpn
     frostwire-bin
