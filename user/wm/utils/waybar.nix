@@ -1,24 +1,24 @@
-{
-  config,
-  pkgs,
-  userSettings,
-  systemSettings,
-  ...
+{ config
+, pkgs
+, pkgs-unstable
+, userSettings
+, systemSettings
+, ...
 }:
 
 {
   programs.waybar = {
     enable = true;
-    package = pkgs.waybar.overrideAttrs (oldAttrs: {
-      postPatch = ''
-        # use hyprctl to switch workspaces
-        sed -i 's/zext_workspace_handle_v1_activate(workspace_handle_);/const std::string command = "hyprctl dispatch focusworkspaceoncurrentmonitor " + std::to_string(id());\n\tsystem(command.c_str());/g' src/modules/wlr/workspace_manager.cpp
-        sed -i 's/gIPC->getSocket1Reply("dispatch workspace " + std::to_string(id()));/gIPC->getSocket1Reply("dispatch focusworkspaceoncurrentmonitor " + std::to_string(id()));/g' src/modules/hyprland/workspaces.cpp
-      '';
-      patches = [
-        # ./patches/waybarpaupdate.patch 
-        # ./patches/waybarbatupdate.patch
-      ];
+    package = pkgs-unstable.waybar.overrideAttrs (oldAttrs: {
+      # postPatch = ''
+      #   # use hyprctl to switch workspaces
+      #   sed -i 's/zext_workspace_handle_v1_activate(workspace_handle_);/const std::string command = "hyprctl dispatch focusworkspaceoncurrentmonitor " + std::to_string(id());\n\tsystem(command.c_str());/g' src/modules/wlr/workspace_manager.cpp
+      #   sed -i 's/gIPC->getSocket1Reply("dispatch workspace " + std::to_string(id()));/gIPC->getSocket1Reply("dispatch focusworkspaceoncurrentmonitor " + std::to_string(id()));/g' src/modules/hyprland/workspaces.cpp
+      # '';
+      # patches = [
+      #   ./patches/waybarpaupdate.patch
+      #   ./patches/waybarbatupdate.patch
+      # ];
     });
     settings = {
       mainBar = {
@@ -110,24 +110,24 @@
           };
         };
         "hyprland/workspaces" = {
-          "format"= "{name}";
-        # "format" = "{icon}";
-        #   "format-icons" = {
-        #     "1" = "󱚌";
-        #     "2" = "󰖟";
-        #     "3" = "";
-        #     "4" = "󰎄";
-        #     "5" = "󰋩";
-        #     "6" = "";
-        #     "7" = "󰄖";
-        #     "8" = "󰑴";
-        #     "9" = "󱎓";
-        #     "scratch_term" = "_";
-        #     "scratch_ranger" = "_󰴉";
-        #     "scratch_music" = "_";
-        #     "scratch_btm" = "_";
-        #     "scratch_pavucontrol" = "_󰍰";
-        #   };
+          "format" = "{name}";
+          # "format" = "{icon}";
+          #   "format-icons" = {
+          #     "1" = "󱚌";
+          #     "2" = "󰖟";
+          #     "3" = "";
+          #     "4" = "󰎄";
+          #     "5" = "󰋩";
+          #     "6" = "";
+          #     "7" = "󰄖";
+          #     "8" = "󰑴";
+          #     "9" = "󱎓";
+          #     "scratch_term" = "_";
+          #     "scratch_ranger" = "_󰴉";
+          #     "scratch_music" = "_";
+          #     "scratch_btm" = "_";
+          #     "scratch_pavucontrol" = "_󰍰";
+          #   };
           "on-click" = "activate";
           "on-scroll-up" = "hyprnome";
           "on-scroll-down" = "hyprnome --previous";
