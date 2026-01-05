@@ -3,19 +3,18 @@
   imports = [
     ./wireless.nix
   ];
-  networking.hostName = systemSettings.hostName; # Define your hostname.
+  networking.hostName = systemSettings.hostName;
+  networking.enableIPv6  = true;
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ ];
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp47s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp46s0.useDHCP = lib.mkDefault true;
+  networking.interfaces.enp4s0.useDHCP = true;
+  networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+  networking.firewall.allowedTCPPorts = [ ];
+  # networking.wg-quick.interfaces.wg0.configFile = "/home/falcon/.dotfiles/system/networking/wg_config.conf";
+  services.cloudflare-warp = {
+    enable = true;
+  };
 }
