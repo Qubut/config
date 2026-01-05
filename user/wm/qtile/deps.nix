@@ -11,6 +11,7 @@ in
   home.packages =
     with pkgs;
     [
+      maim # Command-line screenshot utility
       brightnessctl
       kbdd
       dbus
@@ -30,7 +31,6 @@ in
       feh
       killall
       polkit_gnome
-      nwg-launchers
       libva-utils
       libinput-gestures
       gsettings-desktop-schemas
@@ -47,7 +47,7 @@ in
       xdg-utils
       xdg-desktop-portal
       xdg-desktop-portal-gtk
-      wayland-protocols
+      kdePackages.wayland-protocols
       wayland-utils
       wlroots
       wlsunset
