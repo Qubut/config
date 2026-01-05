@@ -85,7 +85,8 @@ in
       bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "${
         if wmType == "wayland" then "wl-copy" else "xclip -selection clipboard -i"
       }; display-message 'Copied to clipboard'"
-      # set -g @catppuccin_flavour 'mocha'
+      run-shell ${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux
+      set -g @catppuccin_flavour 'mocha'
       set -g @catppuccin_window_left_separator ""
       set -g @catppuccin_window_right_separator " "
       set -g @catppuccin_window_middle_separator " █"
@@ -102,7 +103,6 @@ in
       set -g @catppuccin_status_fill "icon"
       set -g @catppuccin_status_connect_separator "no"
       set -g @catppuccin_directory_text "#{b:pane_current_path}"
-      run-shell ${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin/catppuccin.tmux
 
     '';
   };

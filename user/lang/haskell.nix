@@ -1,4 +1,6 @@
-{ pkgs, pkgs-haskell-ormolu, ... }:
+{ pkgs
+# , pkgs-haskell-ormolu
+, ... }:
 
 {
   home.packages = with pkgs; [
@@ -8,7 +10,7 @@
     haskellPackages.ghc
     haskellPackages.implicit-hie
     # haskellPackages.ghcup
-  ]
-  # ++ [ pkgs-haskell-ormolu ];
-  ;
+  ] ++ [
+    # pkgs-haskell-ormolu
+    ];
 }

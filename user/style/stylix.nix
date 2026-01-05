@@ -9,7 +9,7 @@ in
 {
 
   imports = [ inputs.stylix.homeModules.stylix ];
-
+  gtk.gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
   home.file.".currenttheme".text = userSettings.theme;
   stylix.autoEnable = false;
   stylix.polarity = themePolarity;
@@ -44,43 +44,44 @@ in
     };
   };
 
-  stylix.targets.alacritty.enable = false;
-  programs.alacritty.settings = {
-    colors = {
-      # TODO revisit these color mappings
-      # these are just the default provided from stylix
-      # but declared directly due to alacritty v3.0 breakage
-      primary.background = "#"+config.lib.stylix.colors.base00;
-      primary.foreground = "#"+config.lib.stylix.colors.base07;
-      cursor.text = "#"+config.lib.stylix.colors.base00;
-      cursor.cursor = "#"+config.lib.stylix.colors.base07;
-      normal.black = "#"+config.lib.stylix.colors.base00;
-      normal.red = "#"+config.lib.stylix.colors.base08;
-      normal.green = "#"+config.lib.stylix.colors.base0B;
-      normal.yellow = "#"+config.lib.stylix.colors.base0A;
-      normal.blue = "#"+config.lib.stylix.colors.base0D;
-      normal.magenta = "#"+config.lib.stylix.colors.base0E;
-      normal.cyan = "#"+config.lib.stylix.colors.base0B;
-      normal.white = "#"+config.lib.stylix.colors.base05;
-      bright.black = "#"+config.lib.stylix.colors.base03;
-      bright.red = "#"+config.lib.stylix.colors.base09;
-      bright.green = "#"+config.lib.stylix.colors.base01;
-      bright.yellow = "#"+config.lib.stylix.colors.base02;
-      bright.blue = "#"+config.lib.stylix.colors.base04;
-      bright.magenta = "#"+config.lib.stylix.colors.base06;
-      bright.cyan = "#"+config.lib.stylix.colors.base0F;
-      bright.white = "#"+config.lib.stylix.colors.base07;
-    };
-    font.size = config.stylix.fonts.sizes.terminal;
-    font.normal.family = userSettings.font;
-  };
+  stylix.targets.alacritty.enable = true;
+  # programs.alacritty.settings = {
+  #   colors = {
+  #     # TODO revisit these color mappings
+  #     # these are just the default provided from stylix
+  #     # but declared directly due to alacritty v3.0 breakage
+  #     primary.background = "#"+config.lib.stylix.colors.base00;
+  #     primary.foreground = "#"+config.lib.stylix.colors.base07;
+  #     cursor.text = "#"+config.lib.stylix.colors.base00;
+  #     cursor.cursor = "#"+config.lib.stylix.colors.base07;
+  #     normal.black = "#"+config.lib.stylix.colors.base00;
+  #     normal.red = "#"+config.lib.stylix.colors.base08;
+  #     normal.green = "#"+config.lib.stylix.colors.base0B;
+  #     normal.yellow = "#"+config.lib.stylix.colors.base0A;
+  #     normal.blue = "#"+config.lib.stylix.colors.base0D;
+  #     normal.magenta = "#"+config.lib.stylix.colors.base0E;
+  #     normal.cyan = "#"+config.lib.stylix.colors.base0B;
+  #     normal.white = "#"+config.lib.stylix.colors.base05;
+  #     bright.black = "#"+config.lib.stylix.colors.base03;
+  #     bright.red = "#"+config.lib.stylix.colors.base09;
+  #     bright.green = "#"+config.lib.stylix.colors.base01;
+  #     bright.yellow = "#"+config.lib.stylix.colors.base02;
+  #     bright.blue = "#"+config.lib.stylix.colors.base04;
+  #     bright.magenta = "#"+config.lib.stylix.colors.base06;
+  #     bright.cyan = "#"+config.lib.stylix.colors.base0F;
+  #     bright.white = "#"+config.lib.stylix.colors.base07;
+  #   };
+  #   font.size = config.stylix.fonts.sizes.terminal;
+  #   font.normal.family = userSettings.font;
+  # };
   stylix.targets.kde.enable = true;
   stylix.targets.kitty.enable = true;
   stylix.targets.gtk.enable = true;
   stylix.targets.rofi.enable = if (userSettings.wmType == "x11") then true else false;
   stylix.targets.feh.enable = if (userSettings.wmType == "x11") then true else false;
-  stylix.targets.btop.enable = false;
+  stylix.targets.btop.enable = true;
   stylix.targets.dunst.enable = true;
+  stylix.targets.tmux.enable = true;
   programs.feh.enable = true;
   home.file.".fehbg-stylix".text = ''
     #!/bin/sh

@@ -1,10 +1,15 @@
 {config, userSettings, pkgs, ...}:
 
+let
+  fuzzelWithMouse = pkgs.fuzzel.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      (pkgs.writeText "fuzzel-mouse.patch" (builtins.readFile ./patches/fuzzelmouseinput.patch))
+    ];
+  });
+in
 {
   programs.fuzzel.enable = true;
-  programs.fuzzel.package = pkgs.fuzzel.overrideAttrs (oldAttrs: {
-      patches = ./patches/fuzzelmouseinput.patch;
-    });
+  # programs.fuzzel.package = fuzzelWithMouse;
   programs.fuzzel.settings = {
     main = {
       font = userSettings.font + ":size=20";

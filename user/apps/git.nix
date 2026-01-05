@@ -1,26 +1,28 @@
-{
-  config,
-  pkgs,
-  userSettings,
-  ...
+{ config
+, pkgs
+, userSettings
+, ...
 }:
 
 {
   home.packages = with pkgs; [
     git
     lazygit
+    git-filter-repo
   ];
   programs.git = {
     enable = true;
     lfs.enable = true;
-    aliases = {
-      ci = "commit";
-      co = "checkout";
-      s = "status";
-    };
-    userName = "Qubut";
-    userEmail = "s-aahmed@haw-landshut.de";
-    extraConfig = {
+    settings = {
+      aliases = {
+        ci = "commit";
+        co = "checkout";
+        s = "status";
+      };
+      user = {
+        email = "s-aahmed@haw-landshut.de";
+        name = "Qubut";
+      };
       init.defaultBranch = "main";
       safe.directory = [
         ("/home/" + userSettings.username + "/.dotfiles")
