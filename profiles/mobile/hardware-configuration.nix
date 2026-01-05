@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  modulesPath,
-  systemSettings,
-  ...
+{ config
+, lib
+, pkgs
+, modulesPath
+, systemSettings
+, ...
 }:
 
 {
@@ -63,7 +62,6 @@
     fsType = "ext4";
   };
 
-  swapDevices = [ ];
   nixpkgs.hostPlatform = lib.mkDefault systemSettings.system;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

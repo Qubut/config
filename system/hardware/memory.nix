@@ -17,6 +17,16 @@
   zramSwap = {
     enable = true;
     algorithm = "zstd";
-    memoryPercent = 100;
+    memoryPercent = 50;
+    priority = 100; # Higher priority to prefer zram over disk swap
   };
+  swapDevices = [{
+    device = "/dev/mapper/vg_main-swap";
+    priority = 10; # Lower priority than zram
+  }];
+  boot = {
+    resumeDevice = "/dev/mapper/vg_main-swap"; # Use the swap device for hibernation
+   initrd.services.lvm.enable = true;
+  };
+  powerManagement.enable = true;
 }
