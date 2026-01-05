@@ -5,14 +5,15 @@
 , systemSettings
 , ...
 }:
-
+let nvidia-drm-params = if systemSettings.gpuType == "nvidia" then ["nvidia-drm.fbdev=1"] else [];
+in
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.luks.devices."cryptroot".device = "/dev/nvme0n1p2";
   boot.kernel.sysctl."kernel.sysrq" = 1;
-  boot.kernelPackages = pkgs.linuxPackages_zen;
+  boot.kernelPackages = pkgs.linuxPackages;
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "thunderbolt"
@@ -31,18 +32,10 @@
     "i2c-dev"
     "i2c-piix4"
     "acpi_video"
-    (
-      if systemSettings.gpuType == "amd" then
-        "amdgpu"
-      else if systemSettings.gpuType == "nvidia" then
-        "nvidia"
-      else
-        "i915"
-    )
+    (if systemSettings.cpuHasGpu && systemSettings.cpuType == "intel" then "i915" else "")
+    (if systemSettings.gpuType == "amd" then  "amdgpu" else "nvidia")
   ];
-  boot.kernelParams = [
-    "nvidia-drm.fbdev=1"
-  ];
+  boot.kernelParams = nvidia-drm-params;
   boot.extraModulePackages = [ ];
   boot.supportedFilesystems = [
     "ntfs"
