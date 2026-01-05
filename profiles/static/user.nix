@@ -10,6 +10,8 @@
       "video"
       "input"
       "vboxusers"
+      "docker"
+      "podman"
     ];
     packages = with pkgs; [
       kdePackages.kate
