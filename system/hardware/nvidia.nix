@@ -1,10 +1,23 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, systemSettings
+, ...
 }:
-
+let
+  cpuBusId =
+    if systemSettings.cpuType == "intel" && systemSettings.cpuHasGpu then {
+      intelBusId = "PCI:0:2:0";
+    } else if systemSettings.cpuHasGpu then {
+      amdgpuBusId = "PCI:54:0:0";
+    } else { };
+  gpuBusId =
+    if systemSettings.gpuType == "nvidia" then {
+      nvidiaBusId = "PCI:1:0:0";
+    } else if systemSettings.gpuType == "amd" then {
+      amdgpuBusId = "PCI:54:0:0";
+    } else { };
+in
 {
   environment.systemPackages = with pkgs; [
     mesa
@@ -20,7 +33,7 @@
       # Enable this if you have graphical corruption issues or application crashes after waking
       # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
       # of just the bare essentials.
-      powerManagement.enable = false;
+      powerManagement.enable = true;
 
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).
@@ -41,17 +54,13 @@
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
       package = config.boot.kernelPackages.nvidiaPackages.latest;
-        prime = {
-          sync.enable = true;
-          offload = {
-            enable = false;
-            enableOffloadCmd = false;
-          };
-          # Make sure to use the correct Bus ID values for your system!
-          intelBusId = "PCI:0:2:0";
-          nvidiaBusId = "PCI:1:0:0";
-          # amdgpuBusId = "PCI:54:0:0"; For AMD GPU
+      prime = {
+        sync.enable = true;
+        offload = {
+          enable = false;
+          enableOffloadCmd = false;
         };
+      } // cpuBusId // gpuBusId;
     };
   };
   specialisation = {

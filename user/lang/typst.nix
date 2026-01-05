@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     typst
     tinymist
-    typstfmt
+    typst-live
+    typstyle
   ];
 }

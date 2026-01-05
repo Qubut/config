@@ -30,7 +30,7 @@ in
   qt = {
     enable = true;
     style.package = pkgs.kdePackages.breeze;
-    style.name = "Breeze";
+    style.name = "Breeze-Dark";
     platformTheme.name = "gtk3";
   };
   xsession = {

@@ -1,16 +1,13 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, userSettings, ... }:
 
 {
   imports = [
-    ./pipewire.nix
-    ./dbus.nix
     ./gnome-keyring.nix
-    ./fonts.nix
   ];
 
   # Configure X11
   services.xserver = {
-    enable = true;
+    enable = (userSettings.wmType == "x11");
     xkb = {
       layout = "eu, iq, ru, tr";
       variant = "";
@@ -19,11 +16,7 @@
     excludePackages = [ pkgs.xterm ];
     displayManager = {
       lightdm = {
-        enable = true;
-      };
-      gdm = {
         enable = false;
-        wayland = true;
       };
 
       sessionCommands = ''
@@ -39,13 +32,5 @@
   services.libinput = {
     touchpad.disableWhileTyping = true;
   };
-  services.displayManager = {
-    sddm = {
-      enable = false;
-      wayland.enable = true;
-      enableHidpi = true;
-      theme = "chili";
-      package = lib.mkForce pkgs.kdePackages.sddm;
-    };
-  };
+
 }

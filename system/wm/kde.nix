@@ -12,8 +12,5 @@
   konsole
   oxygen
 ];
-  environment.systemPackages = with pkgs; [
-    kdePackages.sddm
-    kdePackages.kirigami
-  ];
+  environment.systemPackages = with pkgs; [ kdePackages.kirigami ];
 }

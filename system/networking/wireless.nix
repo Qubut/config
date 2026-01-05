@@ -67,7 +67,6 @@ in
     };
   };
 
-  # Ensure macchanger is available
   environment.systemPackages = [ pkgs.macchanger ];
 
   # Optional: Enable WEP support (insecure, use only if required)

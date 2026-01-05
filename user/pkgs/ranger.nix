@@ -8,7 +8,7 @@
         preConfigure = ''
           substituteInPlace ranger/__init__.py \
             --replace "DEFAULT_PAGER = 'less'" "DEFAULT_PAGER = '${lib.getBin pkgs.bat}/bin/bat'"
-      
+
           # give image previews out of the box when building with w3m
           substituteInPlace ranger/config/rc.conf \
             --replace "set preview_images false" "set preview_images true"
@@ -31,7 +31,7 @@
     )
   ];
   home.packages = with pkgs; [
-    poppler_utils
+    poppler-utils
     librsvg
     ffmpegthumbnailer
   ];
