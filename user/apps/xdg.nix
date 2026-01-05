@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   xdg.enable = true;
   xdg.cacheHome = "${config.home.homeDirectory}/.cache";
