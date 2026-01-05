@@ -43,7 +43,7 @@ in
       extended = true;
       ignoreSpace = true;
     };
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     initContent = ''
       ${aliases}
       ${functions}
