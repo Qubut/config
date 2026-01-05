@@ -6,7 +6,7 @@
     ./helix.nix
     ./git.nix
     ./vscodium.nix
-    ./ranger/ranger.nix
+    # ./ranger/ranger.nix
     ./thunderbird.nix
     ./gnome-keyring.nix
     ./podman.nix
@@ -14,6 +14,7 @@
     ./networkmanager-dmenu.nix
     ./atuin.nix
     ./anki.nix
+    ./neovim.nix
   ];
 
 }

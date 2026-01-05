@@ -19,7 +19,7 @@
     ../../user/security
   ];
   home.sessionVariables = {
-    EDITOR = userSettings.editor;
+    # EDITOR = userSettings.editor;
     TERM = userSettings.term;
     BROWSER = userSettings.browser;
   };

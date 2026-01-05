@@ -1,22 +1,25 @@
-{ config, pkgs, lib, ... }:
-{
+{ config, pkgs, ... }:
 
+{
   programs.nixvim = {
     enable = true;
     vimAlias = true;
     viAlias = true;
     defaultEditor = true;
 
-    enableLazy = true;
-
-    globals.mapleader = " ";
-    globals.maplocalleader = " ";
+    globals = {
+      mapleader = " ";
+      maplocalleader = " ";
+    };
 
     colorschemes.gruvbox = {
       enable = true;
       settings = {
         contrast_dark = "hard";
-        italic = { strings = false; comments = true; };
+        italic = {
+          strings = false;
+          comments = true;
+        };
       };
     };
 
@@ -31,15 +34,13 @@
       wrap = false;
       termguicolors = true;
       signcolumn = "yes";
-      updatetime = 100;  # faster CursorHold
+      updatetime = 100;
       mouse = "a";
     };
 
     keymaps = [
-      # Basics
       { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; options.silent = true; }
       { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; options.silent = true; }
-      # Split navigation
       { mode = "n"; key = "<C-h>"; action = "<C-w>h"; }
       { mode = "n"; key = "<C-j>"; action = "<C-w>j"; }
       { mode = "n"; key = "<C-k>"; action = "<C-w>k"; }
@@ -48,7 +49,6 @@
 
     plugins = {
       lualine.enable = true;
-      nix.enable = true;  # nix filetype + highlighting
 
       treesitter = {
         enable = true;
@@ -62,21 +62,34 @@
       lsp = {
         enable = true;
         servers = {
-          nil_ls.enable = true;  # nix
-          nixd.enable = true;    # better nix LSP
-          rust-analyzer.enable = true;
+          nil_ls.enable = true;
+          nixd.enable = true;
+
+          rust_analyzer = {  # ← renamed (no hyphen)
+            enable = true;
+            installCargo = false;  # ← change to true if you want nixvim to install cargo
+            installRustc = false;  # ← silences warnings
+          };
+
           ts_ls.enable = true;
           pyright.enable = true;
+
+          # If we EVER add atopile LSP later:
+          # atopile = {
+          #   enable = true;
+          #   package = null;  # prevents auto-install attempt if needed
+          # };
         };
+
         keymaps = {
           diagnostic = {
             "<leader>j" = "goto_next";
             "<leader>k" = "goto_prev";
           };
           lspBuf = {
-            "gd" = "definition";
-            "gr" = "references";
-            "K" = "hover";
+            gd = "definition";
+            gr = "references";
+            K = "hover";
           };
         };
       };
@@ -90,16 +103,13 @@
           { name = "buffer"; }
         ];
       };
-      extraPlugins = with pkgs.vimPlugins; [ vim-nix ];
     };
 
-    # Fallback for things not yet exposed as options
     extraConfigLua = ''
-      -- Example: disable inline diagnostics (personal taste)
       vim.diagnostic.config({ virtual_text = false })
     '';
   };
 
-  # Optional: make nvim available in systemPackages even if someone disables the module
-  environment.systemPackages = [ config.programs.nixvim.finalPackage ];
+  # Updated: obsolete finalPackage → build.package
+  home.packages = [ config.programs.nixvim.build.package ];
 }
