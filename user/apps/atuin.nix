@@ -1,16 +1,100 @@
-{ config, pkgs, ... }:
+{ config, pkgs, userSettings, ... }:
 let
   baseColors = config.lib.stylix.colors;
   toHex = color: "0x${color}";
+  atuinServerPort = userSettings.atuinServerPort or 8888;
+  atuinServiceCmd = "${pkgs.podman}/bin/podman run --rm --name atuin-server"
+    + " --network atuin-network"
+    + " -p ${toString atuinServerPort}:8888"
+    + " -e ATUIN_HOST=0.0.0.0"
+    + " -e ATUIN_PORT=8888"
+    + " -e ATUIN_OPEN_REGISTRATION=false" # set it to true, register, then revert it to false
+    + " -e ATUIN_DB_URI=postgresql://${dbUser}:${dbPassword}@postgres-atuin:5432/${dbName}"
+    + " ghcr.io/atuinsh/atuin:latest"
+    + " server start";
+  postgresPort = userSettings.postgresPort or 5432;
+  postgresDataDir = "${config.xdg.dataHome}/postgres-atuin";
+  postgresServiceCmd = "${pkgs.podman}/bin/podman run --rm --name postgres-atuin"
+    + " --network atuin-network"
+    + " -p ${toString postgresPort}:5432"
+    + " -e POSTGRES_DB=${dbName}"
+    + " -e POSTGRES_USER=${dbUser}"
+    + " -e POSTGRES_PASSWORD=${dbPassword}"
+    + " -v ${postgresDataDir}:/var/lib/postgresql/data:U"
+    + " docker.io/postgres:15-alpine";
+  # Database configuration
+  dbName = "atuin";
+  dbUser = "atuin";
+  dbPassword = "atuin"; # Change this in production!
+
 in
 {
+  systemd.user.tmpfiles.rules = [
+    "d ${postgresDataDir} 0700 - - - -"
+  ];
+  systemd.user.services.atuin-server = {
+    Unit = {
+      Description = "Atuin Sync Server with PostgreSQL";
+      After = [ "postgres-atuin.service" ];
+      Requires = [ "postgres-atuin.service" ];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = atuinServiceCmd;
+      Restart = "always";
+      RestartSec = "10s";
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
+  systemd.user.services.postgres-atuin = {
+    Unit = {
+      Description = "PostgreSQL for Atuin";
+      After = [ "network.target" ];
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = postgresServiceCmd;
+      Restart = "always";
+      RestartSec = "10s";
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
+  # Create Podman network (runs once)
+  systemd.user.services.atuin-network = {
+    Unit = {
+      Description = "Create Podman network for Atuin";
+      Before = [ "postgres-atuin.service" "atuin-server.service" ];
+    };
+
+    Service = {
+      Type = "oneshot";
+      ExecStart = "/bin/sh -c '${pkgs.podman}/bin/podman network create atuin-network || true'";
+      ExecStop = "/bin/sh -c '${pkgs.podman}/bin/podman network rm atuin-network || true'";
+      RemainAfterExit = true;
+    };
+
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   programs.atuin = {
     enable = true;
 
     # Enable shell integrations based on what shells you use
     enableBashIntegration = true;
     enableZshIntegration = true;
-    enableFishIntegration = false;  # Set to true if you use Fish
+    enableFishIntegration = false; # Set to true if you use Fish
     enableNushellIntegration = false; # Set to true if you use Nushell
 
     # Optional: Use a specific package version
@@ -24,16 +108,16 @@ in
     # Configuration settings
     settings = {
       # Sync settings
-      sync_address = "https://api.atuin.sh";
-      sync_enabled = false;
+      sync_address = "http://localhost:${toString userSettings.atuinServerPort}";
+      sync_enabled = true;
 
       # Search settings
-      search_mode = "fuzzy";  # fuzzy, prefix, fulltext
+      search_mode = "fuzzy"; # fuzzy, prefix, fulltext
       filter_mode = "global"; # global, host, session, directory
       show_preview = true;
 
       # UI settings
-      style = "compact";      # compact, full
+      style = "compact"; # compact, full
       show_help = false;
       exit_mode = "return-query"; # return-query, return-original, close
 
@@ -57,7 +141,7 @@ in
       db_path = "${config.xdg.dataHome}/atuin/history.db";
 
       # Enter key behavior
-      enter_accept = false;   # Press enter to accept, vs ctrl+enter
+      enter_accept = false; # Press enter to accept, vs ctrl+enter
 
       # Workspace settings
       workspaces = false;
@@ -71,7 +155,7 @@ in
       db_wal = true;
 
       # Keymap settings (optional)
-      keymap_mode = "auto";   # auto, vi-ins, vi-cmd, emacs
+      keymap_mode = "auto"; # auto, vi-ins, vi-cmd, emacs
     };
 
     # Custom themes (optional)
@@ -194,13 +278,13 @@ in
   };
 
   # Optional: Additional shell configuration for better integration
-  programs.bash.interactiveShellInit = ''
-    # Atuin bash-specific settings
-    export ATUIN_NOBIND="false"
-  '';
+  # programs.bash.interactiveShellInit = ''
+  #   # Atuin bash-specific settings
+  #   export ATUIN_NOBIND="false"
+  # '';
 
-  programs.zsh.interactiveShellInit = ''
-    # Atuin zsh-specific settings
-    export ATUIN_NOBIND="false"
-  '';
+  # programs.zsh.interactiveShellInit = ''
+  #   # Atuin zsh-specific settings
+  #   export ATUIN_NOBIND="false"
+  # '';
 }
