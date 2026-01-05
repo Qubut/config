@@ -9,6 +9,7 @@
     ./virtualization.nix
     ./gamemode.nix
     ./steam.nix
+    ./xdg.nix
   ];
   programs.xfconf.enable = true;
   programs.thunar.enable = true;

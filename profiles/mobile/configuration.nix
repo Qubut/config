@@ -22,11 +22,7 @@
     ../../system/wm
     ./user.nix
   ];
-
-  programs.firefox.enable = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  programs.nix-ld.enable = true;
   environment.systemPackages = with pkgs; [
     linux-firmware
     vim
@@ -51,14 +47,6 @@
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
-  };
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal
-      pkgs.xdg-desktop-portal-gtk
-    ];
   };
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
