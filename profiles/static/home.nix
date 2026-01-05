@@ -55,7 +55,6 @@
     frostwire-bin
     telegram-desktop
     xournalpp
-    anki-bin
     mpv
     zoom-us
     distrobox
