@@ -1,16 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   programs.gpg = {
     enable = true;
 
     # Security: Use immutable keyring for reproducible configurations
-    mutableKeys = false;     # Keyring managed by Nix, immutable
-    mutableTrust = false;    # Trust database managed by Nix
+    mutableKeys = false; # Keyring managed by Nix, immutable
+    mutableTrust = false; # Trust database managed by Nix
 
     homedir = "${config.xdg.dataHome}/gnupg";
-
-    # Use latest stable GPG package
     package = pkgs.gnupg;
 
     # Public keys to preload (for verification, encryption to known recipients)
@@ -28,7 +26,7 @@
       # disable-ccid = true;
 
       # Smartcard timeout
-      card-timeout = 30;
+      card-timeout = "30";
 
       # Force personalization of empty smartcards
       force = false;
@@ -49,21 +47,17 @@
 
       # Key server configuration
       keyserver = "hkps://keys.openpgp.org";
-      keyserver-options = {
-        "auto-key-retrieve" = true;
-        "include-revoked" = false;
-      };
+      keyserver-options = "auto-key-retrieve include-revoked";
 
       # Encryption behavior
-      encrypt-to = "";  # Don't default to encrypting to self
-      no-emit-version = true;
-      no-comments = true;
+      no-emit-version = "";
+      no-comments = "";
 
       # Security settings
       s2k-cipher-algo = "AES256";
       s2k-digest-algo = "SHA512";
-      s2k-mode = 3;           # Iterated salted S2K
-      s2k-count = 65011712;   # Strong iteration count
+      s2k-mode = "3"; # Iterated salted S2K
+      s2k-count = "65011712"; # Strong iteration count
 
       # Digest and cipher algorithms
       cert-digest-algo = "SHA512";
@@ -72,73 +66,27 @@
 
       # Compression
       compress-algo = "ZLIB";
-      bzip2-compress-level = 9;
+      bzip2-compress-level = "9";
 
       # Key validation
       weak-digest = "SHA1";
-      require-cross-certification = true;
-      no-symkey-cache = true;
+      require-cross-certification = "";
+      no-symkey-cache = "";
 
       # Display settings
       keyid-format = "0xlong";
-      with-fingerprint = true;
-      with-keygrip = true;
-      with-subkey-fingerprint = true;
+      with-fingerprint = "";
+      with-keygrip = "";
+      with-subkey-fingerprint = "";
 
       # Compliance and compatibility
-      throw-keyids = true;
-      export-options = {
-        "export-minimal" = true;
-        "export-clean" = true;
-      };
+      throw-keyids = "";
+      export-options = "export-minimal export-clean";
 
       # Agent configuration (complements services.gpg-agent)
-      use-agent = true;
-      pinentry-mode = "loopback";  # Use pinentry for passphrase entry
+      use-agent = "";
+      pinentry-mode = "loopback"; # Use pinentry for passphrase entry
     };
   };
 
-  # GPG Agent configuration (separate but related)
-  services.gpg-agent = {
-    enable = true;
-    pinentryFlavor = "qt";  # Match your desktop environment
-
-    # Security-focused cache settings
-    defaultCacheTtl = 3600;    # 1 hour for GPG
-    defaultCacheTtlSsh = 1800; # 30 minutes for SSH
-    maxCacheTtl = 7200;        # Max 2 hours
-    maxCacheTtlSsh = 3600;     # Max 1 hour for SSH
-
-    # SSH support
-    enableSshSupport = true;
-    enableExtraSocket = true;  # For remote forwarding
-
-    # Security hardening
-    grabKeyboardAndMouse = true;
-    noAllowExternalCache = true;
-
-    # Shell integration
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-
-    # Smartcard support
-    enableScDaemon = true;
-
-    # Additional security configuration
-    extraConfig = ''
-      # Enforce passphrase constraints
-      enforce-passphrase-constraints
-      min-passphrase-len 12
-      min-passphrase-nonalpha 1
-
-      # Disable insecure features
-      no-allow-external-cache
-      no-allow-mark-trusted
-      allow-loopback-pinentry
-
-      # Connection and resource limits
-      max-connections 3
-      disable-scdaemon
-    '';
-  };
 }
