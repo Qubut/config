@@ -46,7 +46,7 @@ in
       pamixer
       # xdg-desktop-portal-hyprland
       tesseract4
-    ] ++ (with pkgs-unstable; [ kdePackages.wayland-protocols hyprlock hypridle hyprpaper hyprpicker hyprland-protocols hyprshot ])
+    ] ++ (with pkgs-unstable; [ kdePackages.wayland-protocols hypridle hyprpaper hyprpicker hyprland-protocols hyprshot ])
     ++ (with pkgs-hyprland; [ hyprsunset ]);
   home.file.".local/share/pixmaps/hyprland-logo-stylix.svg".source = config.lib.stylix.colors {
     template = builtins.readFile ../../pkgs/hyprland-logo-stylix.svg.mustache;

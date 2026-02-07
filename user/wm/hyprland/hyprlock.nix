@@ -1,91 +1,128 @@
-{config, userSettings, ...}:
+{ config, userSettings, ... }:
 
+let
+  colors = config.lib.stylix.colors;
+  base00 = "rgb(${colors.base00-rgb-r}, ${colors.base00-rgb-g}, ${colors.base00-rgb-b})";
+  base07 = "rgb(${colors.base07-rgb-r}, ${colors.base07-rgb-g}, ${colors.base07-rgb-b})";
+  base08 = "rgb(${colors.base08-rgb-r}, ${colors.base08-rgb-g}, ${colors.base08-rgb-b})";
+  base0A = "rgb(${colors.base0A-rgb-r}, ${colors.base0A-rgb-g}, ${colors.base0A-rgb-b})";
+
+  # Common positions for centering
+  centerPos = "0";
+  centerHalign = "center";
+  centerValign = "center";
+in
 {
-  home.file.".config/hypr/hyprlock.conf".text = ''
-    background {
-      monitor =
-      path = screenshot
+  programs.hyprlock = {
+    enable = true;
+    sourceFirst = true; # Put source entries at the top of the config for priority
 
-      # all these options are taken from hyprland, see https://wiki.hyprland.org/Configuring/Variables/#blur for explanations
-      blur_passes = 4
-      blur_size = 5
-      noise = 0.0117
-      contrast = 0.8916
-      brightness = 0.8172
-      vibrancy = 0.1696
-      vibrancy_darkness = 0.0
-    }
+    settings = {
+      background = [
+        {
+          monitor = "";
+          path = "screenshot";
 
-    # doesn't work yet
-    image {
-      monitor =
-      path = /home/emmet/.dotfiles/user/wm/hyprland/nix-dark.png
-      size = 150 # lesser side if not 1:1 ratio
-      rounding = -1 # negative values mean circle
-      border_size = 0
-      rotate = 0 # degrees, counter-clockwise
+          # Blur options (from Hyprland vars); disable passes if GPU is weak
+          blur_passes = 4; # Set to 0 for no blur on low-end hardware
+          blur_size = 5;
+          noise = 0.0117;
+          contrast = 0.8916;
+          brightness = 0.8172;
+          vibrancy = 0.1696;
+          vibrancy_darkness = 0.0;
+        }
+      ];
 
-      position = 0, 200
-      halign = center
-      valign = center
-    }
+      image = [
+        {
+          monitor = "";
+          path = "/home/emmet/.dotfiles/user/wm/hyprland/nix-dark.png";
+          size = 150; # Lesser side if not 1:1 ratio
+          rounding = -1; # Negative for circle
+          border_size = 0;
+          rotate = 0; # Degrees, counter-clockwise
 
-    input-field {
-      monitor =
-      size = 200, 50
-      outline_thickness = 3
-      dots_size = 0.33 # Scale of input-field height, 0.2 - 0.8
-      dots_spacing = 0.15 # Scale of dots' absolute size, 0.0 - 1.0
-      dots_center = false
-      dots_rounding = -1 # -1 default circle, -2 follow input-field rounding
-      outer_color = rgb(''+config.lib.stylix.colors.base07-rgb-r+'',''+config.lib.stylix.colors.base07-rgb-g+'', ''+config.lib.stylix.colors.base07-rgb-b+'')
-      inner_color = rgb(''+config.lib.stylix.colors.base00-rgb-r+'',''+config.lib.stylix.colors.base00-rgb-g+'', ''+config.lib.stylix.colors.base00-rgb-b+'')
-      font_color = rgb(''+config.lib.stylix.colors.base07-rgb-r+'',''+config.lib.stylix.colors.base07-rgb-g+'', ''+config.lib.stylix.colors.base07-rgb-b+'')
-      fade_on_empty = true
-      fade_timeout = 1000 # Milliseconds before fade_on_empty is triggered.
-      placeholder_text = <i>Input Password...</i> # Text rendered in the input box when it's empty.
-      hide_input = false
-      rounding = -1 # -1 means complete rounding (circle/oval)
-      check_color = rgb(''+config.lib.stylix.colors.base0A-rgb-r+'',''+config.lib.stylix.colors.base0A-rgb-g+'', ''+config.lib.stylix.colors.base0A-rgb-b+'')
-      fail_color = rgb(''+config.lib.stylix.colors.base08-rgb-r+'',''+config.lib.stylix.colors.base08-rgb-g+'', ''+config.lib.stylix.colors.base08-rgb-b+'')
-      fail_text = <i>$FAIL <b>($ATTEMPTS)</b></i> # can be set to empty
-      fail_transition = 300 # transition time in ms between normal outer_color and fail_color
-      capslock_color = -1
-      numlock_color = -1
-      bothlock_color = -1 # when both locks are active. -1 means don't change outer color (same for above)
-      invert_numlock = false # change color if numlock is off
-      swap_font_color = false # see below
+          position = "${centerPos}, 200";
+          halign = centerHalign;
+          valign = centerValign;
+        }
+      ];
 
-      position = 0, -20
-      halign = center
-      valign = center
-    }
+      input-field = [
+        {
+          monitor = "";
+          size = "200, 50";
+          outline_thickness = 3;
+          dots_size = 0.33; # Scale of input-field height, 0.2 - 0.8
+          dots_spacing = 0.15; # Scale of dots' absolute size, 0.0 - 1.0
+          dots_center = false;
+          dots_rounding = -1; # -1 default circle, -2 follow input-field rounding
+          outer_color = base07;
+          inner_color = base00;
+          font_color = base07;
+          fade_on_empty = true;
+          fade_timeout = 1000; # Milliseconds before fade_on_empty is triggered
+          placeholder_text = "<i>Input Password...</i>"; # Text when empty
+          hide_input = false;
+          rounding = -1; # -1 for complete rounding (circle/oval)
+          check_color = base0A;
+          fail_color = base08;
+          fail_text = "<i>$FAIL <b>($ATTEMPTS)</b></i>"; # Can be empty
+          fail_transition = 300; # ms between normal and fail color
+          capslock_color = -1;
+          numlock_color = -1;
+          bothlock_color = -1; # -1 means don't change outer color
+          invert_numlock = false;
+          swap_font_color = false;
 
-    label {
-      monitor =
-      text = Hello, ${userSettings.name}
-      color = rgb(''+config.lib.stylix.colors.base07-rgb-r+'',''+config.lib.stylix.colors.base07-rgb-g+'', ''+config.lib.stylix.colors.base07-rgb-b+'')
-      font_size = 25
-      font_family = ''+userSettings.font+''
+          position = "${centerPos}, -20";
+          halign = centerHalign;
+          valign = centerValign;
+        }
+      ];
 
-      rotate = 0 # degrees, counter-clockwise
+      label = [
+        {
+          monitor = "";
+          text = "Hello, ${userSettings.name}";
+          color = base07;
+          font_size = 25;
+          font_family = userSettings.font;
 
-      position = 0, 160
-      halign = center
-      valign = center
-    }
+          rotate = 0; # Degrees, counter-clockwise
 
-    label {
-      monitor =
-      text = $TIME
-      color = rgb(''+config.lib.stylix.colors.base07-rgb-r+'',''+config.lib.stylix.colors.base07-rgb-g+'', ''+config.lib.stylix.colors.base07-rgb-b+'')
-      font_size = 20
-      font_family = Intel One Mono
-      rotate = 0 # degrees, counter-clockwise
+          position = "${centerPos}, 160";
+          halign = centerHalign;
+          valign = centerValign;
+        }
+        {
+          monitor = "";
+          text = "$TIME";
+          color = base07;
+          font_size = 20;
+          font_family = "Intel One Mono";
+          rotate = 0; # Degrees, counter-clockwise
 
-      position = 0, 80
-      halign = center
-      valign = center
-    }
-  '';
+          position = "${centerPos}, 80";
+          halign = centerHalign;
+          valign = centerValign;
+        }
+        # Add date label (remove if not wanted)
+        {
+          monitor = "";
+          text = "cmd[update:1000] date +'%A, %B %d'"; # Dynamic update every 1s
+          color = base07;
+          font_size = 18;
+          font_family = "Intel One Mono";
+          rotate = 0;
+
+          position = "${centerPos}, 50";
+          halign = centerHalign;
+          valign = centerValign;
+        }
+      ];
+    };
+  };
+  stylix.targets.hyprlock.enable = true;
 }

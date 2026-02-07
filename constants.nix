@@ -24,6 +24,7 @@
     fontPkg = pkgs.dejavu_fonts;
     editor = "helix";
     atuinServerPort = 8888;
+    cursorSize = 30;
   };
   machines = [
     { hostname = "snowfire"; profile = "static"; }
