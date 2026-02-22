@@ -255,6 +255,7 @@ in
         dim_special = 0.0;
         blur = {
           enabled = true;
+          new_optimizations = true;
           size = 5;
           passes = 2;
           ignore_opacity = true;
