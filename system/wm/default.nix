@@ -13,6 +13,5 @@
     ./gnome-keyring.nix
     ./fonts.nix
     ./displaymanager.nix
-    ./uwsm.nix
   ];
 }
