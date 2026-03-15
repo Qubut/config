@@ -1,5 +1,5 @@
 { inputs, pkgs, lib, ... }: let
-  pkgs-hyprland = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.system};
+  pkgs-hyprland = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 in
 {
   # Import wayland config
@@ -19,7 +19,7 @@ in
     hyprland = {
       withUWSM = true;
       enable = true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       xwayland = {
         enable = true;
       };

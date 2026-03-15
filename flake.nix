@@ -60,8 +60,8 @@
       allSystemsOutputs = flake-utils.lib.eachDefaultSystem (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
-          pkgs-unstable = nixpkgs-unstable.legacyPackages.${system};
+          pkgs = import nixpkgs { system = "${system}"; config.allowUnfree = true; };
+          pkgs-unstable = import nixpkgs-unstable { system = "${system}"; config.allowUnfree = true; };
           constants = import ./constants.nix { inherit pkgs; };
           # pkgs-haskell-ormolu = inputs.ormolu.packages.${system}.default;
           pkgs-devenv = inputs.devenv.packages.${system}.default;
