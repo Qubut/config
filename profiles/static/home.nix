@@ -1,5 +1,6 @@
 { config
 , pkgs
+, pkgs-unstable
 , pkgs-devenv
 , userSettings
 , ...
@@ -48,18 +49,18 @@
     obsidian
     gparted
     sshpass
-     vlc
+    vlc
     xorg.xhost
     openfortivpn
-    frostwire-bin
-    telegram-desktop
+    qbittorrent
     xournalpp
     mpv
-    zoom-us
     distrobox
     localsend
     gnome-pomodoro
     antigravity
-  ] ++ [ pkgs-devenv ];
+    zed-editor
+    jetbrains.datagrip
+  ] ++ [ pkgs-devenv ] ++ (with pkgs-unstable; [ code-cursor cursor-cli ]);
 
 }
