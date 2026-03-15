@@ -44,10 +44,12 @@ in
       pipewire
       wireplumber
       pamixer
+      hyprnome
+      socat  # For Hyprland IPC socket communication
       # xdg-desktop-portal-hyprland
       tesseract4
-    ] ++ (with pkgs-unstable; [ kdePackages.wayland-protocols hypridle hyprpaper hyprpicker hyprland-protocols hyprshot ])
-    ++ (with pkgs-hyprland; [ hyprsunset ]);
+    ] ++ (with pkgs-unstable; [ kdePackages.wayland-protocols hypridle hyprpicker hyprland-protocols hyprshot ])
+    ++ (with pkgs-hyprland; [ hyprsunset hyprpaper ]);
   home.file.".local/share/pixmaps/hyprland-logo-stylix.svg".source = config.lib.stylix.colors {
     template = builtins.readFile ../../pkgs/hyprland-logo-stylix.svg.mustache;
     extension = "svg";

@@ -1,5 +1,7 @@
-{ pkgs, pkgs-unstable, config, ... }:
-
+{ pkgs, pkgs-unstable, inputs, config, ... }:
+let
+  pkgs-hyprland = inputs.hyprland.inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+in
 
 {
   services = {
@@ -13,7 +15,7 @@
     };
     hyprsunset = {
       enable = true;
-      package = pkgs-unstable.hyprsunset;
+      package = pkgs-hyprland.hyprsunset;
       settings = {
         "max-gamma" = 100;
         profile = [
@@ -75,5 +77,26 @@
       };
     };
 
+  };
+
+  # Scratchpad handler service - moves child windows out of special workspaces
+  systemd.user.services.scratchpad-handler = {
+    Unit = {
+      Description = "Hyprland scratchpad child window handler";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.bash}/bin/bash %h/.dotfiles/user/wm/hyprland/scripts/scratchpad-handler.sh";
+      Restart = "on-failure";
+      RestartSec = 2;
+      Environment = [
+        "PATH=${pkgs.lib.makeBinPath [ pkgs.bash pkgs.socat pkgs.jq pkgs.coreutils pkgs.gnugrep pkgs.hyprland ]}"
+      ];
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 }

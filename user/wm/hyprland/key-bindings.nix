@@ -20,16 +20,12 @@
       "SUPERSHIFT,X,exec,fnottctl dismiss all"
 
       # ===== SCRATCHPADS =====
-      "SUPER,Z,exec,if hyprctl clients | grep -q scratch_term; then echo \"scratch_term respawn not needed\"; else hyprctl dispatch exec \"[workspace special:scratch_term silent] alacritty --class scratch_term\"; fi"
+      # Apps auto-spawn via workspace rules (on-created-empty)
       "SUPER,Z,togglespecialworkspace,scratch_term"
-      "SUPER,F,exec,if hyprctl clients | grep -q scratch_ranger; then echo \"scratch_ranger respawn not needed\"; else kitty --class scratch_ranger -e ranger\"; fi"
       "SUPER,F,togglespecialworkspace,scratch_ranger"
-      "SUPER,V,exec,if hyprctl clients | grep -q scratch_thunar; then echo \"scratch_thunar respawn not needed\"; else hyprctl dispatch exec \"[workspace special:scratch_thunar silent] thunar --class scratch_thunar\"; fi"
       "SUPER,V,togglespecialworkspace,scratch_thunar"
-      "SUPERSHIFT,B,exec,if hyprctl clients | grep -q scratch_btm; then echo \"scratch_btm respawn not needed\"; else alacritty --class scratch_btm -e btm\"; fi"
       "SUPERSHIFT,B,togglespecialworkspace,scratch_btm"
-      "SUPER,code:172,exec,togglespecialworkspace,scratch_pavucontrol"
-      "SUPER,code:172,exec,if hyprctl clients | grep -q org.pulseaudio.pavucontrol; then echo \"scratch_ranger respawn not needed\"; else pavucontrol; fi"
+      "SUPER,A,togglespecialworkspace,scratch_pavucontrol"
 
       # ===== GROUP MANAGEMENT =====
       "SUPER,slash,togglegroup"
@@ -46,16 +42,39 @@
       "ALT,TAB,bringactivetotop"
       "ALTSHIFT,TAB,cyclenext,prev"
       "ALTSHIFT,TAB,bringactivetotop"
-      "SUPER,TAB,hyprexpo:expo, toggle"
+      # hyprexpo plugin is incompatible with Hyprland 0.54
+      # "SUPER,TAB,hyprexpo:expo,toggle"
       "SUPER,U,focusurgentorlast"
       "SUPER,Q,killactive"
+
+      # ===== WINDOW NAVIGATION =====
+      "SUPER,H,movefocus,l"
+      "SUPER,L,movefocus,r"
+      "SUPER,K,movefocus,u"
+      "SUPER,J,movefocus,d"
+      "SUPER,left,movefocus,l"
+      "SUPER,right,movefocus,r"
+      "SUPER,up,movefocus,u"
+      "SUPER,down,movefocus,d"
+
+      # ===== WINDOW MOVEMENT =====
+      "SUPERSHIFT,H,movewindow,l"
+      "SUPERSHIFT,L,movewindow,r"
+      "SUPERSHIFT,K,movewindow,u"
+      "SUPERSHIFT,J,movewindow,d"
+
+      # ===== WINDOW RESIZE =====
+      "SUPERCTRL,H,resizeactive,-50 0"
+      "SUPERCTRL,L,resizeactive,50 0"
+      "SUPERCTRL,K,resizeactive,0 -50"
+      "SUPERCTRL,J,resizeactive,0 50"
 
       # ===== CURSOR ZOOM =====
       "SUPER,equal, exec, hyprctl keyword cursor:zoom_factor \"$(hyprctl getoption cursor:zoom_factor | grep float | awk '{print $2 + 0.5}')\""
       "SUPER,minus, exec, hyprctl keyword cursor:zoom_factor \"$(hyprctl getoption cursor:zoom_factor | grep float | awk '{print $2 - 0.5}')\""
 
       # ===== CLIPBOARD =====
-      "SUPER,V,exec,wl-copy $(wl-paste | tr \\n)"
+      "SUPERSHIFT,V,exec,wl-copy $(wl-paste | tr \\n)"
 
       # ===== SYSTEM CONTROLS =====
       "CTRLALT,Delete,exec,hyprctl kill"

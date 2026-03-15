@@ -8,9 +8,13 @@
 , ...
 }:
 let
-  systemPackages = inputs.hyprland.packages.${pkgs.system};
+  systemPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
   baseColors = config.lib.stylix.colors;
   toColor = color: "0xff${color}";
+
+  # GPU detection for conditional settings
+  isNvidia = systemSettings.gpuType == "nvidia";
+  isAmd = systemSettings.gpuType == "amd";
 
   bezierSettings = [
     "wind, 0.05, 0.9, 0.1, 1.05"
@@ -18,6 +22,8 @@ let
     "winOut, 0.3, -0.3, 0, 1"
     "liner, 1, 1, 1, 1"
     "linear, 0.0, 0.0, 1.0, 1.0"
+    "easeOutExpo, 0.16, 1, 0.3, 1"
+    "easeInOutQuart, 0.76, 0, 0.24, 1"
   ];
 
   animationSettings = [
@@ -25,7 +31,7 @@ let
     "windowsOut, 1, 5, winOut, popin"
     "windowsMove, 1, 5, wind, slide"
     "border, 1, 10, default"
-    "borderangle, 1, 100, linear, loop"
+    "borderangle, 1, 100, linear, once"
     "fade, 1, 10, default"
     "workspaces, 1, 5, wind"
     "windows, 1, 6, wind, slide"
@@ -72,12 +78,14 @@ in
     package = systemPackages.hyprland;
     xwayland.enable = true;
     portalPackage = pkgs.xdg-desktop-portal-hyprland;
-    systemd.enable = true;
+    # Disable Home Manager systemd integration when using UWSM (withUWSM = true in system config)
+    systemd.enable = false;
 
     settings = {
       bezier = bezierSettings;
       animations = {
         enabled = true;
+        workspace_wraparound = true;
         animation = animationSettings;
       };
 
@@ -89,14 +97,14 @@ in
         create_abstract_socket = false;
       };
 
-      # OpenGL settings
-      opengl = {
+      # OpenGL settings (GPU-conditional)
+      opengl = lib.mkIf isNvidia {
         nvidia_anti_flicker = true;
       };
 
-      # Render settings
+      # Render settings (GPU-conditional)
       render = {
-        direct_scanout = 0;
+        direct_scanout = if isNvidia then 0 else 1;
         expand_undersized_textures = true;
         xp_mode = false;
         ctm_animation = 2;
@@ -105,13 +113,14 @@ in
         send_content_type = true;
         cm_auto_hdr = 1;
         new_render_scheduling = false;
+        # explicit_sync and explicit_sync_kms removed in Hyprland 0.54
       };
 
-      # Cursor settings (enhanced)
+      # Cursor settings (GPU-conditional)
       cursor = {
         invisible = false;
         sync_gsettings_theme = true;
-        no_hardware_cursors = 2;
+        no_hardware_cursors = if isNvidia then 2 else 0;
         no_break_fs_vrr = 2;
         min_refresh_rate = 24;
         hotspot_padding = 1;
@@ -126,7 +135,7 @@ in
         enable_hyprcursor = true;
         hide_on_key_press = false;
         hide_on_touch = true;
-        use_cpu_buffer = 2;
+        use_cpu_buffer = if isNvidia then 2 else 0;
         warp_back_after_non_mouse_input = false;
       };
 
@@ -137,10 +146,7 @@ in
         enforce_permissions = false;
       };
 
-      # Experimental settings
-      experimental = {
-        xx_color_management_v4 = false;
-      };
+      # experimental:xx_color_management_v4 removed in Hyprland 0.54
 
       general = {
         layout = "master";
@@ -151,16 +157,20 @@ in
         gaps_in = 7;
         gaps_out = 7;
         allow_tearing = false;
+        snap = {
+          enabled = true;
+          window_gap = 10;
+          monitor_gap = 10;
+          border_overlap = false;
+        };
       };
 
       group = {
-        # Group border colors
         "col.border_active" = "${activeBorderColors} 270deg";
         "col.border_inactive" = "0xff${baseColors.base02}aa";
         "col.border_locked_active" = "0xff${baseColors.base0A}ee";
         "col.border_locked_inactive" = "0xff${baseColors.base02}aa";
 
-        # Group settings
         auto_group = true;
         insert_after_current = true;
         focus_removed_window = true;
@@ -210,22 +220,17 @@ in
       ];
 
       layerrule = [
-        "blur,waybar"
-        "xray,waybar"
-        "blur,launcher"
-        "blur,gtk-layer-shell"
-        "xray,gtk-layer-shell"
-        "blur,~nwggrid"
-        "xray 1,~nwggrid"
-        "animation fade,~nwggrid"
+        "blur on, match:namespace waybar"
+        "xray on, match:namespace waybar"
+        "blur on, match:namespace launcher"
+        "blur on, match:namespace gtk-layer-shell"
+        "xray on, match:namespace gtk-layer-shell"
+        "blur on, match:namespace ~nwggrid"
+        "xray on, match:namespace ~nwggrid"
+        "animation fade, match:namespace ~nwggrid"
       ];
 
-      blurls = [
-        "waybar"
-        "launcher"
-        "gtk-layer-shell"
-        "~nwggrid"
-      ];
+      # blurls is deprecated in Hyprland 0.54, use layerrule instead
 
       binds = {
         movefocus_cycles_fullscreen = false;
@@ -240,6 +245,13 @@ in
         accel_profile = "adaptive";
         follow_mouse = 2;
         float_switch_override_focus = 0;
+        touchpad = {
+          natural_scroll = true;
+          tap-to-click = true;
+          drag_lock = true;
+          disable_while_typing = true;
+          scroll_factor = 1.0;
+        };
       };
 
       misc = {
@@ -248,6 +260,11 @@ in
         enable_swallow = true;
         swallow_regex = "(scratch_term)|(Alacritty)|(kitty)";
         font_family = userSettings.font;
+        vfr = true;
+        vrr = 1;
+        animate_manual_resizes = false;
+        animate_mouse_windowdragging = false;
+        disable_watchdog_warning = true;  # Suppress "started without start-hyprland" warning
       };
 
       decoration = {
@@ -265,7 +282,57 @@ in
           special = true;
           popups = true;
         };
+        shadow = {
+          enabled = true;
+          range = 8;
+          render_power = 2;
+          color = "0x66000000";
+          color_inactive = "0x33000000";
+          offset = "0 2";
+        };
       };
+
+      # Gestures - workspace_swipe* options removed in Hyprland 0.54
+      # Use the new gesture syntax instead
+      gestures = {
+        workspace_swipe_distance = 300;
+        workspace_swipe_cancel_ratio = 0.5;
+        workspace_swipe_min_speed_to_force = 30;
+        workspace_swipe_create_new = true;
+        workspace_swipe_invert = true;
+      };
+
+      # New gesture syntax for workspace swiping (replaces workspace_swipe and workspace_swipe_fingers)
+      gesture = [
+        "3, horizontal, workspace"
+      ];
+
+      debug = {
+        disable_logs = false;
+        enable_stdout_logs = false;
+      };
+
+      # Smart gaps - remove gaps when only one tiled window
+      # Per-workspace layouts (0.54 feature)
+      workspace = [
+        "w[tv1], gapsout:0, gapsin:0"
+        "f[1], gapsout:0, gapsin:0"
+        "1, layout:master"
+        "2, layout:master"
+        "3, layout:dwindle"
+        "4, layout:dwindle"
+        "5, layout:master"
+        "6, layout:master"
+        "7, layout:master"
+        "8, layout:master"
+        "9, layout:monocle"
+        # Special workspaces (scratchpads) with auto-spawn
+        "special:scratch_term, on-created-empty:alacritty --class scratch_term"
+        "special:scratch_ranger, on-created-empty:kitty --class scratch_ranger -e ranger"
+        "special:scratch_thunar, on-created-empty:thunar"
+        "special:scratch_btm, on-created-empty:alacritty --class scratch_btm -e btm"
+        "special:scratch_pavucontrol, on-created-empty:pavucontrol"
+      ];
     };
   };
 }
