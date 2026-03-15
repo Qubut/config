@@ -52,7 +52,7 @@
 
       treesitter = {
         enable = true;
-        folding = true;
+        folding.enable = true;
         nixvimInjections = true;
         grammarPackages = with config.programs.nixvim.plugins.treesitter.package.builtGrammars; [
           bash c cpp lua nix python rust tsx typescript vim regex
