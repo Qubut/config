@@ -104,10 +104,14 @@ in
     ".config/qt6ct/qt6ct.conf".text = pkgs.lib.mkBefore (builtins.readFile ./qt6ct.conf);
   };
   home.file.".config/hypr/hyprpaper.conf".text = ''
-    preload = ''+config.stylix.image+''
+splash = false
+ipc = on
 
-    wallpaper = ,''+config.stylix.image+''
-
+wallpaper {
+    monitor =
+    path = ${config.stylix.image}
+    fit_mode = cover
+}
   '';
   home.packages = with pkgs; [
       kdePackages.qt6ct
