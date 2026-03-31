@@ -21,6 +21,11 @@
   boot.initrd.kernelModules = [
     "dm-snapshot"
   ];
+
+  boot.kernelParams = [
+      "resume_offset=533760"
+    ];
+  boot.resumeDevice = "/dev/disk/by-label/nixos";
   boot.kernelModules = [
     "kvm-intel"
     "cpufreq_powersave"
@@ -43,24 +48,6 @@
     "fat32"
     "btrfs"
   ];
-  fileSystems."/" = {
-    device = "/dev/dm-3";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/nvme0n1p9";
-    fsType = "vfat";
-    options = [
-      "fmask=0022"
-      "dmask=0022"
-    ];
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/dm-0";
-    fsType = "ext4";
-  };
 
   nixpkgs.hostPlatform = lib.mkDefault systemSettings.system;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

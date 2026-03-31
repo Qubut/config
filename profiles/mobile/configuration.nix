@@ -20,6 +20,7 @@
     ../../system/shell
     ../../system/style/stylix.nix
     ../../system/wm
+    ./disko.nix
     ./user.nix
   ];
   programs.nix-ld.enable = true;

@@ -24,11 +24,12 @@
     };
     hyprland = {
       url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.systems.follows = "systems";
     };
     devenv = {
       url = "github:cachix/devenv";
-      # inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland-plugins = {
       url = "github:hyprwm/hyprland-plugins";
@@ -46,6 +47,10 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     inputs@{ self
@@ -53,6 +58,7 @@
     , nixpkgs-unstable
     , home-manager
     , flake-utils
+    , disko
     , ...
     }:
     let
@@ -99,7 +105,9 @@
                   system = system;
                   modules = [
                     (./. + "/profiles" + ("/" + machine.profile) + "/configuration.nix")
-                    # inputs.lix-module.nixosModules.default
+                  ] ++ lib.optionals (machine.profile == "mobile") [
+                    inputs.disko.nixosModules.disko
+                    (./. + "/profiles/mobile/disko.nix")
                   ];
                   specialArgs = {
                     systemSettings = constants.baseSystemSettings // {
@@ -126,9 +134,9 @@
       homeConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { } (
         builtins.attrValues allSystemsOutputs.homeConfigurations
       );
+
       nixosConfigurations = lib.foldl' lib.attrsets.unionOfDisjoint { } (
         builtins.attrValues allSystemsOutputs.nixosConfigurations
       );
     };
 }
-# cgEJXpVKdcoisE7M

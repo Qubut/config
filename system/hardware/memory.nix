@@ -24,9 +24,5 @@
     device = "/dev/mapper/vg_main-swap";
     priority = 10; # Lower priority than zram
   }];
-  boot = {
-    resumeDevice = "/dev/mapper/vg_main-swap"; # Use the swap device for hibernation
-   initrd.services.lvm.enable = true;
-  };
   powerManagement.enable = true;
 }

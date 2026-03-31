@@ -22,9 +22,12 @@ in
     "usb_storage"
     "sd_mod"
   ];
-  boot.initrd.kernelModules = [
-    "dm-snapshot"
-  ];
+  boot.initrd = {
+    kernelModules = [
+      "dm-snapshot"
+    ];
+    services.lvm.enable = true;
+  };
   boot.kernelModules = [
     "kvm-intel"
     "cryptd"
@@ -43,7 +46,7 @@ in
     "fat32"
     "btrfs"
   ];
-
+  boot.resumeDevice = "/dev/mapper/vg_main-swap"; # Use the swap device for hibernation
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/f52f15c7-be65-475b-a4e7-162c6762e077";
     fsType = "btrfs";
