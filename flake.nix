@@ -23,8 +23,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:hyprwm/Hyprland/v0.54.3";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.systems.follows = "systems";
     };
     devenv = {
