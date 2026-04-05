@@ -20,6 +20,15 @@
     ../../system/style/stylix.nix
     ../../system/wm
     ./user.nix
+    (import ../../system/app/docker.nix {
+      storageDriver = null;
+      inherit pkgs userSettings lib;
+    })
+    ../../system/app/waydroid.nix
+    ../../system/app/virtualization.nix
+    ../../system/app/gamemode.nix
+    ../../system/app/steam.nix
+    ../../system/app/xdg.nix
   ];
 
   programs.nix-ld.enable = true;
