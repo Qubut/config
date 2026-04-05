@@ -21,7 +21,6 @@ in
       libva-utils
       libinput-gestures
       gsettings-desktop-schemas
-      pkgs.zenity
       wlr-randr
       wtype
       ydotool
@@ -30,7 +29,8 @@ in
       keepmenu
       pinentry-gnome3
       wev
-      python311Packages.pyqt6
+      python313
+      rofi
       kdePackages.qtwayland
       qt6.qtwayland
       xdg-utils
@@ -43,11 +43,14 @@ in
       pwvucontrol
       pipewire
       wireplumber
+      brightnessctl
       pamixer
       hyprnome
       socat  # For Hyprland IPC socket communication
+      jq
       # xdg-desktop-portal-hyprland
       tesseract4
+        # python313Packages.tkinter
     ] ++ (with pkgs-unstable; [ kdePackages.wayland-protocols hypridle hyprpicker hyprland-protocols hyprshot ])
     ++ (with pkgs-hyprland; [ hyprsunset hyprpaper ]);
   home.file.".local/share/pixmaps/hyprland-logo-stylix.svg".source = config.lib.stylix.colors {

@@ -46,7 +46,7 @@ in
     "fat32"
     "btrfs"
   ];
-  boot.resumeDevice = "/dev/mapper/vg_main-swap"; # Use the swap device for hibernation
+  boot.resumeDevice = "/dev/mapper/vg_main-swap"; # Use static profile swap LV for hibernation
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/f52f15c7-be65-475b-a4e7-162c6762e077";
     fsType = "btrfs";
@@ -115,7 +115,12 @@ in
     ];
   };
 
-  swapDevices = [ ];
+  swapDevices = [
+    {
+      device = "/dev/mapper/vg_main-swap";
+      priority = 10;
+    }
+  ];
   nixpkgs.hostPlatform = lib.mkDefault systemSettings.system;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

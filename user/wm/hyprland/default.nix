@@ -11,6 +11,7 @@ let
   systemPackages = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system};
   baseColors = config.lib.stylix.colors;
   toColor = color: "0xff${color}";
+  cursorThemeName = if (config.stylix.polarity == "light") then "Quintom_Ink" else "Quintom_Snow";
 
   # GPU detection for conditional settings
   isNvidia = systemSettings.gpuType == "nvidia";
@@ -63,13 +64,22 @@ in
     ../utils/gtklock.nix
     ../utils/fnott.nix
     ../utils/fuzzel.nix
+    ../utils/rofi.nix
     ../utils/waybar.nix
     ../utils/redshift.nix
   ];
 
+  home.pointerCursor = {
+    package = pkgs.quintom-cursor-theme;
+    name = cursorThemeName;
+    size = userSettings.cursorSize;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
   gtk.cursorTheme = {
     package = pkgs.quintom-cursor-theme;
-    name = if (config.stylix.polarity == "light") then "Quintom_Ink" else "Quintom_Snow";
+    name = cursorThemeName;
     size = userSettings.cursorSize;
   };
 
@@ -132,7 +142,7 @@ in
         default_monitor = "";
         zoom_factor = 1.0;
         zoom_rigid = false;
-        enable_hyprcursor = true;
+        enable_hyprcursor = false;
         hide_on_key_press = false;
         hide_on_touch = true;
         use_cpu_buffer = if isNvidia then 2 else 0;
@@ -237,9 +247,9 @@ in
       };
 
       input = {
-        kb_layout = "eu, ara, ru, tr";
+        kb_layout = "de, eu, ara, ru, tr";
         kb_options = "grp:rctrl_rshift_toggle";
-        kb_variant = ",buckwalter,phonetic,";
+        kb_variant = ",,buckwalter,phonetic,";
         repeat_delay = 350;
         repeat_rate = 50;
         accel_profile = "adaptive";

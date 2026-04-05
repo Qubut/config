@@ -20,9 +20,5 @@
     memoryPercent = 50;
     priority = 100; # Higher priority to prefer zram over disk swap
   };
-  swapDevices = [{
-    device = "/dev/mapper/vg_main-swap";
-    priority = 10; # Lower priority than zram
-  }];
   powerManagement.enable = true;
 }

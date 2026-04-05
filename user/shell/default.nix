@@ -1,5 +1,6 @@
-{ pkgs, userSettings, ... }:
+{ pkgs, lib, userSettings, systemSettings, ... }:
 let
+  isNvidia = systemSettings.gpuType == "nvidia";
   envExtra = ''
     ########## SHELL & SESSION ##########
     export ZSHDO
@@ -27,11 +28,10 @@ let
     # Sway specific
     export __GL_GSYNC_ALLOWED=0
     export __GL_VRR_ALLOWED=0
-    export WLR_DRM_NO_ATOMIC=1
     # Graphics/Display
     export QT_QPA_PLATFORM=${userSettings.wmType}
     export GDK_BACKEND=${userSettings.wmType}
-    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    ${lib.optionalString isNvidia "export __GLX_VENDOR_LIBRARY_NAME=nvidia"}
     export MOZ_ENABLE_WAYLAND=1
     export SDL_VIDEODRIVER=${userSettings.wmType}
     export _JAVA_AWT_WM_NONREPARENTING=1

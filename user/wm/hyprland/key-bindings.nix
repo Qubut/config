@@ -15,7 +15,8 @@
       "SUPER,P,exec, kitty --class scratch_term -e ipdf ~"
       "SUPER,O,exec, obsidian"
       "SUPERSHIFT,P,exec,hyprprofile-dmenu"
-      "SUPER,F1,exec,fuzzel"
+      "SUPER,F1,exec,rofi -show drun"
+      "SUPER,F2,exec,bash ~/.dotfiles/user/wm/hyprland/scripts/show-keybinds.sh"
       "SUPER,X,exec,fnottctl dismiss"
       "SUPERSHIFT,X,exec,fnottctl dismiss all"
 
@@ -91,12 +92,12 @@
       ",code:256,exec,swayosd-client --output-volume mute-toggle"
       "SHIFT,code:122,exec,swayosd-client --output-volume lower"
       "SHIFT,code:123,exec,swayosd-client --output-volume raise"
-
-      ",code:232,exec,swayosd-client --brightness lower"
-      ",code:233,exec,swayosd-client --brightness raise"
-
-      ",code:237,exec,brightnessctl --device='asus::kbd_backlight' set 1-"
-      ",code:238,exec,brightnessctl --device='asus::kbd_backlight' set +1"
+      ",XF86BrightnessDown,exec,brightnessctl set 5%-"
+      ",XF86BrightnessUp,exec,brightnessctl set +5%"
+      ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
+      ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
+      "SUPER,F3,exec,brightnessctl set 5%-"
+      "SUPER,F4,exec,brightnessctl set +5%"
 
       ",code:255,exec,airplane-mode"
 

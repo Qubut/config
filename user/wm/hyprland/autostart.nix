@@ -15,6 +15,7 @@ let
     "QT_AUTO_SCREEN_SCALE_FACTOR,1"
     "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
     "CLUTTER_BACKEND,wayland"
+    "XCURSOR_THEME,${config.gtk.cursorTheme.name}"
     "XCURSOR_SIZE,${cursorSize}"
     "ELECTRON_OZONE_PLATFORM_HINT,auto"
     "NIXOS_OZONE_WL,1"
@@ -27,7 +28,6 @@ let
     "GLX_VENDOR_LIBRARY_NAME,nvidia"
     "__GLX_VENDOR_LIBRARY_NAME,nvidia"
     "NVD_BACKEND,direct"
-    "WLR_DRM_DEVICES,/dev/dri/card2:/dev/dri/card1"
     "ENABLE_HDR_WSI,1"
     "DXVK_HDR,1"
   ];

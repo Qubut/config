@@ -22,7 +22,7 @@
       package = lib.mkForce pkgs.kdePackages.sddm;
     };
     gdm = {
-      enable = (userSettings == "gdm");
+      enable = (userSettings.dm == "gdm");
       wayland = true;
       autoSuspend = true;
       banner = "Welcome to NixOS";

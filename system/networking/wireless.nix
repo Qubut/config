@@ -1,28 +1,32 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   # Script to randomize MAC address using macchanger for enhanced privacy
   change-mac = pkgs.writeShellScript "change-mac" ''
-    card=$1
-    tmp=$(mktemp)
-    ${pkgs.macchanger}/bin/macchanger "$card" -s | grep -oP "[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[^ ]*" > "$tmp"
-    mac1=$(cat "$tmp" | head -n 1)
-    mac2=$(cat "$tmp" | tail -n 1)
-    if [ "$mac1" = "$mac2" ]; then
-      if [ "$(cat /sys/class/net/"$card"/operstate)" = "up" ]; then
-        ${pkgs.iproute2}/bin/ip link set "$card" down &&
-        ${pkgs.macchanger}/bin/macchanger -r "$card"
-        ${pkgs.iproute2}/bin/ip link set "$card" up
-      else
-        ${pkgs.macchanger}/bin/macchanger -r "$card"
+    for wirelessPath in /sys/class/net/*/wireless; do
+      [ -e "$wirelessPath" ] || continue
+      card="$(basename "$(dirname "$wirelessPath")")"
+
+      tmp=$(mktemp)
+      ${pkgs.macchanger}/bin/macchanger "$card" -s | grep -oP "[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[^ ]*" > "$tmp"
+      mac1=$(cat "$tmp" | head -n 1)
+      mac2=$(cat "$tmp" | tail -n 1)
+      rm -f "$tmp"
+
+      if [ "$mac1" = "$mac2" ]; then
+        if [ "$(cat /sys/class/net/"$card"/operstate)" = "up" ]; then
+          ${pkgs.iproute2}/bin/ip link set "$card" down &&
+          ${pkgs.macchanger}/bin/macchanger -r "$card"
+          ${pkgs.iproute2}/bin/ip link set "$card" up
+        else
+          ${pkgs.macchanger}/bin/macchanger -r "$card"
+        fi
       fi
-    fi
+    done
   '';
 in
 {
   # networking.wireless.enable = true;
-
-  networking.wireless.userControlled.enable = true;
 
   # Store sensitive data (e.g., passwords) in an environment file
   # File should be at /etc/wpa_supplicant.env and readable only by root
@@ -52,18 +56,17 @@ in
   # '';
 
   # Systemd service to randomize MAC address on startup for privacy
-  # Replace "wlan0" with your actual wireless interface (e.g., wlp3s0)
   systemd.services.macchanger = {
     enable = true;
-    description = "Randomize MAC address on wlan0";
+    description = "Randomize MAC address on all wireless interfaces";
     wants = [ "network-pre.target" ];
     before = [ "network-pre.target" ];
-    bindsTo = [ "sys-subsystem-net-devices-wlan0.device" ];
-    after = [ "sys-subsystem-net-devices-wlan0.device" ];
+    after = [ "systemd-udev-settle.service" ];
     wantedBy = [ "multi-user.target" ];
+    unitConfig.ConditionPathExistsGlob = "/sys/class/net/*/wireless";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${change-mac} wlan0";
+      ExecStart = "${change-mac}";
     };
   };
 

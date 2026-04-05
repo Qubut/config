@@ -5,6 +5,24 @@
   services.tumbler.enable = true; # Thumbnail support for images
   services.openssh.enable = true;
   services.gvfs.enable = true; # Mount, trash, and other functionalities
+  services.acpid = {
+    enable = true;
+    logEvents = true;
+    handlers = {
+      brightnessUp = {
+        event = "video/brightnessup.*";
+        action = "${pkgs.brightnessctl}/bin/brightnessctl --device=intel_backlight set +5% || true";
+      };
+      brightnessDown = {
+        event = "video/brightnessdown.*";
+        action = "${pkgs.brightnessctl}/bin/brightnessctl --device=intel_backlight set 5%- || true";
+      };
+      brightnessCycle = {
+        event = "video/brightnesscycle.*";
+        action = "${pkgs.brightnessctl}/bin/brightnessctl --device=intel_backlight set +5% || true";
+      };
+    };
+  };
   systemd = {
     user.services.polkit-gnome-authentication-agent-1 = {
       description = "polkit-gnome-authentication-agent-1";

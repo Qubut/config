@@ -1,6 +1,7 @@
 { systemSettings, ... }:
 {
   i18n.defaultLocale = systemSettings.locale;
+  console.keyMap = "de";
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "de_DE.UTF-8";

@@ -5,6 +5,7 @@
 , ...
 }:
 let
+  isMobileProfile = systemSettings.profile == "mobile";
   cpuBusId =
     if systemSettings.cpuType == "intel" && systemSettings.cpuHasGpu then {
       intelBusId = "PCI:0:2:0";
@@ -17,6 +18,18 @@ let
     } else if systemSettings.gpuType == "amd" then {
       amdgpuBusId = "PCI:54:0:0";
     } else { };
+  primeMode =
+    if isMobileProfile then {
+      reverseSync.enable = true;
+      sync.enable = false;
+      offload.enable = false;
+      offload.enableOffloadCmd = false;
+    } else {
+      reverseSync.enable = false;
+      sync.enable = false;
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+    };
 in
 {
   environment.systemPackages = with pkgs; [
@@ -54,20 +67,14 @@ in
 
       # Optionally, you may need to select the appropriate driver version for your specific GPU.
       package = config.boot.kernelPackages.nvidiaPackages.stable;
-      prime = {
-        # sync.enable = true;
-        reverseSync.enable = true;
-        # offload = {
-        #   enable = true;
-        #   enableOffloadCmd = false;
-        # };
-      } // cpuBusId // gpuBusId;
+      prime = primeMode // cpuBusId // gpuBusId;
     };
   };
   specialisation = {
     on-the-go.configuration = {
       system.nixos.tags = [ "on-the-go" ];
       hardware.nvidia = {
+        prime.reverseSync.enable = lib.mkForce false;
         prime.offload.enable = lib.mkForce true;
         prime.offload.enableOffloadCmd = lib.mkForce true;
         prime.sync.enable = lib.mkForce false;

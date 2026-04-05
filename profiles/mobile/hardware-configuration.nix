@@ -31,6 +31,12 @@
   boot.initrd.kernelModules = [
     "dm-snapshot"
   ];
+  boot.initrd.postDeviceCommands = ''
+    for led in /sys/class/leds/*::numlock; do
+      [ -e "$led/brightness" ] || continue
+      echo 1 > "$led/brightness" || true
+    done
+  '';
   boot.kernelPackages = pkgs.linuxPackages;
   boot.kernelParams = [
     "resume_offset=533760"
