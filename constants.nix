@@ -14,7 +14,7 @@
     username = "falcon";
     name = "Falcon";
     dotfilesDir = "~/.dotfiles";
-    theme = "ayu-dark";
+    theme = "doom-one";
     wm = "hyprland"; # Must match selections in ./user/wm/ and ./system/wm/
     wmType = if (wm == "hyprland") then "wayland" else "x11";
     dm = "sddm";
