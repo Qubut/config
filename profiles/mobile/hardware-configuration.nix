@@ -8,7 +8,17 @@
 
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10;
+  };
+  fileSystems."/boot" = {
+    options = [ "umask=0077" ]; # owner read/write only
+  };
+
+  # This is the official way to handle the random seed warning
+  boot.tmp.useTmpfs = true; # recommended
+  boot.tmp.tmpfsSize = "50%";
   boot.loader.efi.canTouchEfiVariables = true;
   boot.initrd.availableKernelModules = [
     "xhci_pci"
@@ -21,10 +31,10 @@
   boot.initrd.kernelModules = [
     "dm-snapshot"
   ];
-
+  boot.kernelPackages = pkgs.linuxPackages;
   boot.kernelParams = [
-      "resume_offset=533760"
-    ];
+    "resume_offset=533760"
+  ];
   boot.resumeDevice = "/dev/disk/by-label/nixos";
   boot.kernelModules = [
     "kvm-intel"
