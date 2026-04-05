@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, userSettings, ... }:
 {
   users.users.falcon = {
     isNormalUser = true;
@@ -17,4 +17,9 @@
       kdePackages.kate
     ];
   };
+  security.doas.extraRules = [{
+    users = [ "${userSettings.username}" ];
+    keepEnv = true;
+    persist = true;
+  }];
 }

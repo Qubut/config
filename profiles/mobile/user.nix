@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, userSettings, ... }:
 {
   users.users.falcon = {
     isNormalUser = true;
@@ -6,13 +6,17 @@
     shell = pkgs.zsh;
     extraGroups = [
       "networkmanager"
-      "wheel"
       "video"
       "input"
-      "vboxusers"
     ];
     packages = with pkgs; [
       kdePackages.kate
     ];
+
   };
+  security.doas.extraRules = [{
+    users = [];
+    keepEnv = true;
+    persist = true;
+  }];
 }
