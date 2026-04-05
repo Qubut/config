@@ -20,7 +20,7 @@ let
   '';
 in
 {
-  networking.wireless.enable = true;
+  # networking.wireless.enable = true;
 
   networking.wireless.userControlled.enable = true;
 

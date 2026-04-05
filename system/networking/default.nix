@@ -3,6 +3,7 @@
   imports = [
     ./wireless.nix
   ];
+  programs.nm-applet.enable = true;
   networking.hostName = systemSettings.hostName;
   networking.enableIPv6  = true;
   # Configure network proxy if necessary
