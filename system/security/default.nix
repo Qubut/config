@@ -8,6 +8,8 @@
     ./firewall.nix
     ./gpg.nix
     ./openvpn.nix
+    ./sshd.nix
+    ./fail2ban.nix
     ./apparmor.nix
   ];
 }
