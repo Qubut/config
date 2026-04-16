@@ -62,7 +62,6 @@
     mpv
     localsend
     antigravity
-    zed-editor
     jetbrains.datagrip
     gh
   ] ++ [ pkgs-devenv ] ++ (with pkgs-unstable; [ code-cursor cursor-cli ]);
