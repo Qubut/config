@@ -40,6 +40,12 @@
     "center on, match:class ^(org.pulseaudio.pavucontrol)$"
     "opacity 0.90, match:class ^(org.pulseaudio.pavucontrol)$"
 
+    # Monitor layout GUI
+    "float on, match:class ^(wdisplays)$"
+    "center on, match:class ^(wdisplays)$"
+    "size (monitor_w*0.8) (monitor_h*0.8), match:class ^(wdisplays)$"
+    "float on, match:title ^(wdisplays)$"
+
     # Miniframe (Emacs minibuffer)
     "float on, match:title \\*Minibuf.*"
     "size (monitor_w*0.64) (monitor_h*0.5), match:title \\*Minibuf.*"

@@ -37,6 +37,7 @@ in
       xdg-desktop-portal
       xdg-desktop-portal-gtk
       wayland-utils
+      wdisplays
       wlroots
       wlsunset
       pavucontrol

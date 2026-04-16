@@ -17,6 +17,7 @@
       "SUPERSHIFT,P,exec,hyprprofile-dmenu"
       "SUPER,F1,exec,rofi -show drun"
       "SUPER,F2,exec,bash ~/.dotfiles/user/wm/hyprland/scripts/show-keybinds.sh"
+      "SUPER,F7,exec,wdisplays"
       "SUPER,X,exec,fnottctl dismiss"
       "SUPERSHIFT,X,exec,fnottctl dismiss all"
 
