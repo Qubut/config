@@ -1,25 +1,33 @@
 { pkgs, lib, userSettings, config, ... }:
 
+let
+  sddmTheme = pkgs.where-is-my-sddm-theme;
+in
 {
-    environment.systemPackages = with pkgs; [
-    (sddm-chili-theme.override {
-      themeConfig = {
-        background = config.stylix.image;
-        ScreenWidth = 3840;
-        ScreenHeight = 2160;
-        blur = true;
-        recursiveBlurLoops = 3;
-        recursiveBlurRadius = 5;
-      };
-    })
+  environment.systemPackages = [
+    sddmTheme
   ];
   services.displayManager = {
     sddm = {
       enable = (userSettings.dm == "sddm");
       wayland.enable = true;
       enableHidpi = true;
-      theme = "chili";
+      theme = "where_is_my_sddm_theme";
       package = lib.mkForce pkgs.kdePackages.sddm;
+      extraPackages = with pkgs.qt6; [
+        qtdeclarative
+        qt5compat
+        qtvirtualkeyboard
+        qtsvg
+      ];
+      autoNumlock = true;
+      settings = {
+        Input = {
+          XkbLayout = "de,eu,ara,ru,tr";
+          XkbVariant = ",,buckwalter,phonetic,";
+          XkbOptions = "grp:rctrl_rshift_toggle";
+        };
+      };
     };
     gdm = {
       enable = (userSettings.dm == "gdm");
@@ -27,5 +35,11 @@
       autoSuspend = true;
       banner = "Welcome to NixOS";
     };
+  };
+
+  services.xserver.xkb = {
+    layout = "de,eu,ara,ru,tr";
+    variant = ",,buckwalter,phonetic,";
+    options = "grp:rctrl_rshift_toggle";
   };
 }
