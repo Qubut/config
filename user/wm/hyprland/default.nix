@@ -119,9 +119,9 @@ in
         xp_mode = false;
         ctm_animation = 2;
         cm_fs_passthrough = 2;
-        cm_enabled = true;
-        send_content_type = true;
-        cm_auto_hdr = 1;
+        cm_enabled = if isNvidia then false else true;
+        send_content_type = if isNvidia then false else true;
+        cm_auto_hdr = if isNvidia then 0 else 1;
         new_render_scheduling = false;
         # explicit_sync and explicit_sync_kms removed in Hyprland 0.54
       };
@@ -226,7 +226,7 @@ in
       };
 
       monitor = [
-        "DP-4,3840x2160@119.88,auto,1.06666667"
+        ", preferred, auto, 1"
       ];
 
       layerrule = [
@@ -271,7 +271,7 @@ in
         swallow_regex = "(scratch_term)|(Alacritty)|(kitty)";
         font_family = userSettings.font;
         vfr = true;
-        vrr = 1;
+        vrr = if isNvidia then 0 else 1;
         animate_manual_resizes = false;
         animate_mouse_windowdragging = false;
         disable_watchdog_warning = true;  # Suppress "started without start-hyprland" warning
