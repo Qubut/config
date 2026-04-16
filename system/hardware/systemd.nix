@@ -1,9 +1,11 @@
 { ... }:
 
 {
-  services.journald.extraConfig = "SystemMaxUse=50M\nSystemMaxFiles=5";
-  services.journald.rateLimitBurst = 500;
-  services.journald.rateLimitInterval = "30s";
+  services.journald = {
+    extraConfig = "SystemMaxUse=250M\nSystemMaxFiles=10";
+    rateLimitBurst = 500;
+    rateLimitInterval = "30s";
+  };
   systemd = {
     slices."nix-daemon".sliceConfig = {
       ManagedOOMMemoryPressure = "kill";
