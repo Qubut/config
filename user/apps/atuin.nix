@@ -1,4 +1,4 @@
-{ config, pkgs, userSettings, ... }:
+{ config, lib, pkgs, userSettings, ... }:
 let
   baseColors = config.lib.stylix.colors;
   toHex = color: "0x${color}";
@@ -276,6 +276,7 @@ in
       };
     };
   };
+  xdg.configFile."atuin/config.toml".force = lib.mkForce true;
 
   # Optional: Additional shell configuration for better integration
   # programs.bash.interactiveShellInit = ''
