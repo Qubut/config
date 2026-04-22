@@ -61,7 +61,6 @@
     xournalpp
     mpv
     localsend
-    antigravity
     jetbrains.datagrip
     gh
     zoom-us
