@@ -64,6 +64,7 @@
     antigravity
     jetbrains.datagrip
     gh
+    zoom-us
   ] ++ [ pkgs-devenv ] ++ (with pkgs-unstable; [ code-cursor cursor-cli ]);
 
 }
