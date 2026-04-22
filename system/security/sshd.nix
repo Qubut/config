@@ -15,5 +15,5 @@
       X11Forwarding = false;
     };
   };
-  users.users.${userSettings.username}.openssh.authorizedKeys.keys = authorizedKeys;
+  # users.users.${userSettings.username}.openssh.authorizedKeys.keys = authorizedKeys;
 }
