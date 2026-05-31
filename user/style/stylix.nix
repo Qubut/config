@@ -9,7 +9,34 @@ in
 {
 
   imports = [ inputs.stylix.homeModules.stylix ];
-  gtk.gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
+
+  # Explicitly enable GTK module stylix sets the colors but doesn't always trigger
+  # the home-manager gtk module activation that writes gtk-3.0/settings.ini
+  gtk = {
+    enable = true;
+    gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";
+    theme = {
+      name = if themePolarity == "dark" then "adw-gtk3-dark" else "adw-gtk3";
+      package = pkgs.adw-gtk3;
+    };
+    iconTheme = {
+      name = if themePolarity == "dark" then "Papirus-Dark" else "Papirus-Light";
+      package = pkgs.papirus-icon-theme;
+    };
+  };
+
+  # GTK4 / libadwaita apps (modern Thunar, Nautilus, etc.) ignore settings.ini and
+  # only respect color-scheme from dconf without this they always render light
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = if themePolarity == "dark" then "prefer-dark" else "prefer-light";
+      gtk-theme = if themePolarity == "dark" then "adw-gtk3-dark" else "adw-gtk3";
+      icon-theme = if themePolarity == "dark" then "Papirus-Dark" else "Papirus-Light";
+    };
+  };
+
+  # GTK_THEME forces the theme at process level
+  home.sessionVariables.GTK_THEME = if themePolarity == "dark" then "adw-gtk3-dark" else "adw-gtk3";
   home.file.".currenttheme".text = userSettings.theme;
   stylix.autoEnable = false;
   stylix.polarity = themePolarity;
@@ -117,6 +144,8 @@ wallpaper {
       kdePackages.qt6ct
       kdePackages.breeze
       # kdePackages.breeze-icons
+      adw-gtk3
+      papirus-icon-theme
       pkgs.noto-fonts-monochrome-emoji
   ];
 
