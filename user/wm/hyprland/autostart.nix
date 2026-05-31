@@ -3,6 +3,8 @@ let
   cursorSize = builtins.toString userSettings.cursorSize;
   isNvidia = systemSettings.gpuType == "nvidia";
   isAmd = systemSettings.gpuType == "amd";
+  # On muxless hybrid Intel+AMD, Intel iGPU drives all displays → iHD for VA-API
+  isHybridIntelAmd = isAmd && systemSettings.cpuHasGpu && systemSettings.cpuType == "intel";
 
   # Base environment variables (all GPUs)
   baseEnvVars = [
@@ -33,10 +35,16 @@ let
   ];
 
   # AMD-specific environment variables
-  amdEnvVars = [
-    "LIBVA_DRIVER_NAME,radeonsi"
-    "AMD_VULKAN_ICD,RADV"
-  ];
+  # Hybrid Intel+AMD: display is on Intel (AMD has no KMS/CRTCs on Kaby Lake G), so LIBVA
+  # stays iHD. RADV applies for Vulkan. DRI_PRIME=1 is set at session level (hyprland.nix).
+  amdEnvVars =
+    if isHybridIntelAmd then [
+      "LIBVA_DRIVER_NAME,iHD"
+      "AMD_VULKAN_ICD,RADV"
+    ] else [
+      "LIBVA_DRIVER_NAME,radeonsi"
+      "AMD_VULKAN_ICD,RADV"
+    ];
 
   # Intel-specific environment variables
   intelEnvVars = [

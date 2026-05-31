@@ -24,7 +24,7 @@
     ./user.nix
     (import ../../system/app/docker.nix {
       storageDriver = null;
-      inherit pkgs userSettings lib;
+      inherit pkgs systemSettings userSettings lib;
     })
     # ../../system/app/waydroid.nix
     # ../../system/app/virtualization.nix
@@ -50,6 +50,7 @@
     wayland-scanner
     kdePackages.qtbase
     timeshift
+    home-manager
   ];
 
   environment.sessionVariables = {

@@ -1,19 +1,32 @@
-{ pkgs, lib, userSettings, storageDriver ? null, ... }:
+{ pkgs
+, lib
+, systemSettings
+, userSettings
+, storageDriver ? null
+, ...
+}:
 
-assert lib.asserts.assertOneOf "storageDriver" storageDriver [
-  null
-  "aufs"
-  "btrfs"
-  "devicemapper"
-  "overlay"
-  "overlay2"
-  "zfs"
-];
-
+let
+  validStorageDrivers = [ null "aufs" "btrfs" "devicemapper" "overlay" "overlay2" "zfs" ];
+  gpuType = systemSettings.gpuType or "";
+  isNvidia = gpuType == "nvidia";
+  isAmd = gpuType == "amd";
+  username = userSettings.username or "root";
+in
 {
-  services.xserver.videoDrivers = [ "nvidia" ];
+  assertions = [
+    {
+      assertion = storageDriver == null || builtins.elem storageDriver validStorageDrivers;
+      message = ''
+        storageDriver must be one of: ${lib.concatStringsSep ", "
+          (builtins.filter (x: x != null) validStorageDrivers)} or null
+        Got: ${if storageDriver == null then "null" else toString storageDriver}
+      '';
+    }
+  ];
+
   hardware.nvidia-container-toolkit = {
-    enable = true;
+    enable = isNvidia;
     mount-nvidia-executables = true;
     mount-nvidia-docker-1-directories = true;
   };
@@ -51,10 +64,9 @@ assert lib.asserts.assertOneOf "storageDriver" storageDriver [
   };
   environment.systemPackages = with pkgs; [
     lazydocker
-    nvidia-container-toolkit
     dive # look into docker image layers
     podman-tui # status of containers in the terminal
     docker-compose # start group of containers for dev
     podman-compose # start group of containers for dev
-  ];
+  ] ++ lib.optional isNvidia pkgs.nvidia-container-toolkit;
 }
